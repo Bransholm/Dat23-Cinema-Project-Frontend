@@ -1,15 +1,24 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Navigation: React.FC = () => {
   return (
     <nav>
       <ul>
         <li>
-          <Link to="/">Customer View</Link>
+          <Link to="/">Aktuelle Film</Link>
         </li>
         <li>
-          <Link to="/">Login (Admin)</Link>
+          <Link to="/">Enkelt Film</Link>
+        </li>
+        <li>
+          <Link to="/">Booking</Link>
+        </li>
+        <li>
+          <Link to="/customer-movies">Kunde Film Oversigt</Link>
+        </li>
+        <li>
+          <Link to="/admin-movies"> Admin Film Oversigt </Link>
         </li>
       </ul>
     </nav>

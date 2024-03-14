@@ -1,0 +1,13 @@
+THIS IS HOW TO MAKE A NEW ROUTE:
+
+Step 1. make your tsx document. Then export your function.
+
+Step 2 Go to "Navigation.tsx.
+Inside the <ul> ... </ul> make a new<: <li> <Link to="/'YOUR-TSX-FILE'"> WRITE WHAT THE USER SEE </Link> </li>
+
+Step 3 Go to "App.tsx".
+Now make your <Route path="/'YOUR-TSX-FILE'/" {YOUR-FUNCTION}/>
+Remember to import your file at the top of the App.tsx file
+
+
+F
