@@ -1,7 +1,10 @@
+import MovieFilter from "./AdminMovieFilter.tsx";
+
 function AdminMovies() {
   return (
     <>
-      <h1>Things Are Things</h1>
+      <h3>Admininistrer Film</h3>
+      <MovieFilter/>
     </>
   );
 }
