@@ -1,12 +1,15 @@
 import { Movie } from "./MoviesData.ts";
-// import { moviesList } from "./MoviesData";
-// Define the props interface
 interface MovieTableProps {
   moviesList: Movie[];
+  onEdit: (id: number) => void;
+  onDelete: (id: number) => void;
 }
-// export default function UserTable({ users }: UserTableProps) {
 
-export default function UserTable({ moviesList }: MovieTableProps) {
+export default function UserTable({
+  moviesList,
+  onEdit,
+  onDelete,
+}: MovieTableProps) {
   return (
     <table>
       <thead>
@@ -16,6 +19,7 @@ export default function UserTable({ moviesList }: MovieTableProps) {
           <th>Duration</th>
           <th>3D</th>
           <th>Active</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -25,6 +29,10 @@ export default function UserTable({ moviesList }: MovieTableProps) {
             <td>{movie.duration}</td>
             <td>{movie.is3D ? "Active" : "Inactive"}</td>
             <td>{movie.isActive ? "Active" : "Inactive"}</td>
+            <td>
+              <button onClick={() => onEdit(movie.id)}>Opdater</button>
+              <button onClick={() => onDelete(movie.id)}>Slet</button>
+            </td>
           </tr>
         ))}
       </tbody>
