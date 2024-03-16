@@ -8,7 +8,10 @@ export default function NavHeader() {
     <nav>
       <ul>
         <li>
-          <NavLink to="/">Home</NavLink>
+          <NavLink to="/">Home/Forestillinger</NavLink>
+        </li>
+        <li>
+          <NavLink to="/reservations">Reservations</NavLink>
         </li>
         {/* <AuthStatus /> */}
       </ul>

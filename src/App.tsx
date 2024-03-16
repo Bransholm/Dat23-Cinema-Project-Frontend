@@ -9,6 +9,7 @@ function App() {
       <Routes>
         <Route path="*" element={<h2>Not Found</h2>} />
         <Route path="/" element={<h2>Hjem</h2>} />
+        <Route path="/reservations" element={<h2>Reservations!</h2>} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </Layout>
