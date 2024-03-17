@@ -1,11 +1,11 @@
 // import { useAuth } from "../security/AuthProvider";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function ReservationList() {
   // const auth = useAuth();
 
-  const [reservations, setReservations] = useState();
+  //   const [reservations, setReservations] = useState();
 
   useEffect(() => {});
 
