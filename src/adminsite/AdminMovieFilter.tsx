@@ -11,6 +11,25 @@ interface Movie {
 }
 
 export default function MovieFilter() {
+  // ...
+  const [movieList, setMovieList] = useState<Movie[]>(MoviesList);
+
+  const handleEdit = (id, updatedMovie) => {
+    const updatedMovieList = movieList.map((movie) => {
+      if (movie.id === id) {
+        return updatedMovie;
+      }
+      return movie;
+    });
+    setMovieList(updatedMovieList);
+  };
+
+  const handleDelete = (id) => {
+    const updatedMovieList = movieList.filter((movie) => movie.id !== id);
+    setMovieList(updatedMovieList);
+  };
+
+  // UseStates that stores the selected filtere and sort options
   const [durationFilter, setDurationFilter] = useState<string>("");
   const [isActiveFilter, setIsActiveFilter] = useState<string>("");
   const [is3dFilter, setIs3dFilter] = useState<string>("");
@@ -24,6 +43,7 @@ export default function MovieFilter() {
   const filterMovies = () => {
     let filtered = MoviesList;
 
+    // Her bliver film-listen sorteret på baggrund af alle filtrene
     if (durationFilter === "120+") {
       filtered = filtered.filter((movie) => movie.duration >= 120);
     } else if (durationFilter === "below 120") {
@@ -42,6 +62,7 @@ export default function MovieFilter() {
       filtered = filtered.filter((movie) => !movie.is3D);
     }
 
+    // Her bliver film-listen sorteret på baggrund af sortOption
     if (sortOption === "title-ascending") {
       filtered.sort((a, b) => a.title.localeCompare(b.title));
     } else if (sortOption === "title-descending") {
@@ -117,7 +138,11 @@ export default function MovieFilter() {
           </select>
         </label>
       </div>
-      <UserTable moviesList={filteredMovies} />
+      <UserTable moviesList={filteredMovies}
+        // moviesList={moviesList}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
     </>
   );
 }
