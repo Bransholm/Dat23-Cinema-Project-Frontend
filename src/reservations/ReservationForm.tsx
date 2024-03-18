@@ -138,13 +138,11 @@ export default function ReservationForm() {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const addedOrEdited = reservationFormData.id ? "edited" : "added";
     reservationFormData.time_stamp = new Date();
     reservationFormData.total_price = totalPrice;
     reservationFormData.customer_id = chosenCustomerId;
     reservationFormData.show_id = chosenShowId;
     const newReservation = await addReservation(reservationFormData);
-    alert(`Reservation ${addedOrEdited} successfully!`);
     setReservationFormData({ ...EMPTY_RESERVATION });
     console.info("New/Edited Reservation", newReservation);
     console.log(reservationFormData);
