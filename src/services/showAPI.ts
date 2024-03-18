@@ -3,7 +3,7 @@ import { handleHttpErrors } from "./fetchUtils";
 
 const SHOWS_URL = API_URL + "/shows";
 
-interface Show {
+interface show {
   id: number | null;
   theatre: {
     id: number;
@@ -20,18 +20,18 @@ interface Show {
 
 // let showList: Array<Show> = [];
 
-async function getShows(): Promise<Array<Show>> {
+async function getShows(): Promise<Array<show>> {
   console.log("fetchShows");
   // Fetch data from the API URL and handle any HTTP errors.
   return fetch(SHOWS_URL).then(handleHttpErrors);
 }
 
-async function getShow(id: number): Promise<Show> {
+async function getShow(id: number): Promise<show> {
   // if (ShowList.length > 0) return [...showList];
   return fetch(SHOWS_URL + "/" + id).then(handleHttpErrors);
 }
 
-export type { Show };
+export type { show };
 
 // Export the getShows function to use it in other modules.
 export { getShows, getShow };

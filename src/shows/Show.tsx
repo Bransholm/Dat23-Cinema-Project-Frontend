@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getShow, Show as showInterface } from "../services/showAPI";
+import { getShow, show as showInterface } from "../services/showAPI";
 
 export default function Show() {
   const { id } = useParams();
-  console.log("id", id);
+//   console.log("id", id);
 
   const [show, setShow] = useState<showInterface | null>(null);
   const [error, setError] = useState("");
