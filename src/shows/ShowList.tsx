@@ -15,13 +15,6 @@ export default function ShowList() {
       .catch(() => setError("Show not fetched"));
   }, []);
 
-//   const showListItems = shows.map((show) => {
-//     return (
-//       <li key={show.id}>
-//         {show.id} {show.date} {show.startTime} {show.theatre.id} {show.movie.id} {show.movie.title} {show.movie.duration}
-//       </li>
-//     );
-//   });
 
 const showListItems = shows.map((show) => {
   return (
@@ -54,7 +47,7 @@ const showListItems = shows.map((show) => {
           <ul>{showListItems}</ul>
         </div>
       ) : (
-        <h2>Sorry. Show's not found</h2>
+        <h2>Sorry. Shows are not found</h2>
       )}
     </>
   );

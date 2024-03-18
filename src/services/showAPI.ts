@@ -18,7 +18,7 @@ interface Show {
 }
 
 
-// let shows: Array<Show> = [];
+// let showList: Array<Show> = [];
 
 async function getShows(): Promise<Array<Show>> {
   console.log("fetchShows");
@@ -26,7 +26,12 @@ async function getShows(): Promise<Array<Show>> {
   return fetch(SHOWS_URL).then(handleHttpErrors);
 }
 
+async function getShow(id: number): Promise<Show> {
+  // if (ShowList.length > 0) return [...showList];
+  return fetch(SHOWS_URL + "/" + id).then(handleHttpErrors);
+}
+
 export type { Show };
 
 // Export the getShows function to use it in other modules.
-export { getShows };
+export { getShows, getShow };

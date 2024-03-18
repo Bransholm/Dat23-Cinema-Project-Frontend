@@ -4,6 +4,7 @@
   grid-template-columns: minmax(4cm, auto) 1fr minmax(4cm, auto); /* Adjust the width of the side margins here */
   grid-template-rows: auto 1fr; /* Header takes its content size, rest is stretched */
   min-height: 100vh;
+  min-width: 80vw;
   background-color: #121212; /* Dark background color */
   color: #ffffff; /* Light text color */
   margin-top: 0;
@@ -29,10 +30,10 @@
 
 
 /* Red details */ 
-.page-content {
+/* .page-content {
   border: 2px solid #6e5e5d3b; /*  border for content */
-  border-radius: 8px; /* Rounded corners */
-}
+/*  border-radius: 8px; /* Rounded corners */
+/* } */
 
 /* layout.css */
 nav {
