@@ -10,6 +10,8 @@ interface Show {
   };
   movie: {
     id: number;
+    title: string;
+    duration: number;
   };
   date: string;
   startTime: string;
