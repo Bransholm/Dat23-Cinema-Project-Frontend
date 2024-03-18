@@ -4,7 +4,7 @@
   row-gap: 0.5em;
 }
 
-#showsDialog {
+dialog {
   position: fixed;
   width: 50%;
   height: 50%;

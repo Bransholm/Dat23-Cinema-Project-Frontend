@@ -6,43 +6,44 @@ import {
   getShows,
   addReservation,
   Price,
-  getTickets,
-} from "../services/apiFacade";
+  getPrices,
+  Customer,
+  getCustomers,
+} from "../services/ReservationApiFacade";
 
 const EMPTY_RESERVATION = {
   id: null,
-  showId: null,
-  customer: {
-    id: null,
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: 0,
-  },
-  totalPrice: 0,
-  timeStamp: null,
+  show_id: null,
+  customer_id: null,
+  total_price: 0,
+  time_stamp: null,
   ticket: "",
-  ticketAmount: 0,
+  ticket_amount: 0,
 };
 
 export default function ReservationForm() {
   const [reservationFormData, setReservationFormData] =
     useState<Reservation>(EMPTY_RESERVATION);
   const [shows, setShows] = useState<Show[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const [prices, setPrices] = useState<Price[]>([]);
   const [totalPrice, setTotalprice] = useState(0);
   const [amount, setAmount] = useState(0);
   const [ticket, setTicket] = useState("");
   const [chosenShowId, setChosenShowId] = useState(0);
+  const [chosenCustomerId, setChosenCustomerId] = useState(0);
   const [showsDialogActive, setShowsDialogActive] = useState(false);
+  const [customersDialogActive, setCustomersDialogActive] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const showsResponse = await getShows();
-        const ticketsResponse = await getTickets(); // Assuming there's a function to fetch tickets
+        const ticketsResponse = await getPrices();
+        const customersResponse = await getCustomers();
         setShows(showsResponse);
         setPrices(ticketsResponse);
+        setCustomers(customersResponse);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -53,47 +54,71 @@ export default function ReservationForm() {
 
   useEffect(() => {
     handlePriceChange();
-  }, [ticket, amount, prices, handlePriceChange]);
+  }, [ticket, amount, handlePriceChange]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function handlePriceChange() {
+    //Function works despite warning
     let price = 0;
-    for (let i = 0; i < prices.length; i++) {
-      if (prices[i].name === ticket) {
-        price += prices[i].price;
-      }
-      if (amount && amount != 0) {
-        price *= amount;
+    if (amount != 0) {
+      for (let i = 0; i < prices.length; i++) {
+        if (prices[i].name === ticket) {
+          price += prices[i].price;
+        }
         if (amount <= 5 && prices[i].name === "reservation_fee") {
           price += prices[i].price;
         } else if (amount >= 10 && prices[i].name === "group_discount") {
-          const discount = parseFloat(prices[i].percent.replace("%", ""));
+          const discount = prices[i].percent;
           price -= (price * discount) / 100;
         }
       }
+      price *= amount;
     }
     setTotalprice(price);
   }
 
   const ShowsList = () => {
-    return (
-      <ul>
-        {shows.map((show) => (
-          <li
-            key={`show-${show.id}`}
-            onClick={() => handleShowChange(show.id || 0)}
-          >
-            {show.movie} - {show.date} - {show.startTime}
-          </li>
-        ))}
-      </ul>
-    );
+    return shows.map((show) => (
+      <button
+        key={`show-${show.id}`}
+        onClick={() => handleShowChange(show.id || 0)}
+      >
+        {show.movie} - {show.date}
+      </button>
+    ));
+  };
+  const CustomersList = () => {
+    return customers.map((customer) => (
+      <button
+        key={`customer-${customer.id}`}
+        onClick={() => handleCustomerChange(customer.id || 0)}
+      >
+        {customer.id} - {customer.first_name} - {customer.last_name} -{" "}
+        {customer.email} - {customer.phone_number}
+      </button>
+    ));
   };
   function handleShowChange(showId: number) {
-    setReservationFormData((prevFormData) => ({
-      ...prevFormData,
-      showId: showId,
-    }));
     setChosenShowId(showId);
+    setShowsDialogActive(false);
+  }
+  function handleCustomerChange(customerId: number) {
+    setChosenCustomerId(customerId);
+    setCustomersDialogActive(false);
+  }
+
+  function handleShowsDialogClick(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setShowsDialogActive(true);
+  }
+  function handleCustomersDialogClick(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setCustomersDialogActive(true);
+  }
+  function handleCloseDialog(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setShowsDialogActive(false);
+    setCustomersDialogActive(false);
   }
 
   const handleReservationFormChange = (
@@ -104,28 +129,26 @@ export default function ReservationForm() {
       ...prevFormData,
       [name]: value,
     }));
-    setTicket(value);
-    setAmount(reservationFormData.ticketAmount);
+    if (name === "ticket") {
+      setTicket(value);
+    } else if (name === "ticket_amount") {
+      setAmount(parseInt(value));
+    }
   };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const addedOrEdited = reservationFormData.id ? "edited" : "added";
-    reservationFormData.timeStamp = new Date();
+    reservationFormData.time_stamp = new Date();
+    reservationFormData.total_price = totalPrice;
+    reservationFormData.customer_id = chosenCustomerId;
+    reservationFormData.show_id = chosenShowId;
     const newReservation = await addReservation(reservationFormData);
     alert(`Reservation ${addedOrEdited} successfully!`);
     setReservationFormData({ ...EMPTY_RESERVATION });
     console.info("New/Edited Reservation", newReservation);
+    console.log(reservationFormData);
   };
-
-  function handleShowsDialogClick(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-    setShowsDialogActive(true);
-  }
-  function handleCloseDialog(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-    setShowsDialogActive(false);
-  }
 
   return (
     <>
@@ -169,45 +192,23 @@ export default function ReservationForm() {
           id="ticket_amount"
           onChange={handleReservationFormChange}
         />
-        {/* Customer */}
-        <h3>Customer</h3>
-        <label htmlFor="firstName">Fornavn:</label>
-        <input
-          type="text"
-          name="firstName"
-          id="firstName"
-          onChange={handleReservationFormChange}
-        />
-        <label htmlFor="lastName">Efternavn:</label>
-        <input
-          type="text"
-          name="lastName"
-          id="lastName"
-          onChange={handleReservationFormChange}
-        />
-        <label htmlFor="email">Email:</label>
-        <input
-          type="text"
-          name="email"
-          id="email"
-          onChange={handleReservationFormChange}
-        />
-        <label htmlFor="phoneNumber">Telefon:</label>
-        <input
-          type="number"
-          name="phoneNumber"
-          id="phoneNumber"
-          onChange={handleReservationFormChange}
-        />
+        <button id="choose-customer-btn" onClick={handleCustomersDialogClick}>
+          Vælg kunde
+        </button>
+        <h4>Valgt kunde: {chosenCustomerId}</h4>
+        <br />
         <button className="reservation-form-submit-btn" onClick={handleSubmit}>
           Submit
         </button>
       </form>
-      <h3>Total: {totalPrice} kr.</h3>
+      <h3>Total: {totalPrice.toFixed(2)} kr.</h3>
       {/* Dialog for shows */}
       <dialog id="showsDialog" open={showsDialogActive}>
-        <h2>Alle shows!</h2>
         <ShowsList></ShowsList>
+        <button onClick={handleCloseDialog}>X</button>
+      </dialog>
+      <dialog id="customersDialog" open={customersDialogActive}>
+        <CustomersList></CustomersList>
         <button onClick={handleCloseDialog}>X</button>
       </dialog>
     </>
