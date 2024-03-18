@@ -1,0 +1,18 @@
+/* ShowStyle.css */
+.show-list-item {
+  padding: 10px;
+  border-bottom: 1px solid #333; /* Border between list items */
+  transition: background-color 0.3s ease; /* Smooth transition for background color change */
+}
+
+.show-list-item:hover {
+  background-color: #333; /* Darker background color on hover */
+  cursor: pointer;
+}
+
+.show-list-item a {
+  text-decoration: none;
+  color: inherit;
+}
+
+

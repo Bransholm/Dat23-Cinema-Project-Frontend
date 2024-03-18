@@ -6,8 +6,8 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="app-layout">
-      <header className="nav-header">
+    <div className="app-layout ">
+      <header className="nav-header ">
         <NavHeader />
       </header>
       <main className="page-content">{children}</main>

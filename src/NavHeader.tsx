@@ -7,10 +7,10 @@ export default function NavHeader() {
   return (
     <nav>
       <ul>
-        <li>
+        <li className="custom-tab">
           <NavLink to="/">Home</NavLink>
         </li>
-        <li>
+        <li className="custom-tab">
           <NavLink to="/shows">Shows</NavLink>
         </li>
         {/* <AuthStatus /> */}

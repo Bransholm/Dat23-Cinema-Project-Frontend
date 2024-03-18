@@ -29,12 +29,6 @@
 }
 
 
-/* Red details */ 
-/* .page-content {
-  border: 2px solid #6e5e5d3b; /*  border for content */
-/*  border-radius: 8px; /* Rounded corners */
-/* } */
-
 /* layout.css */
 nav {
   background-color: #1e1e1e; /* Darker background color for the nav */
@@ -47,12 +41,12 @@ ul {
   display: flex;
 }
 
-li {
+
+.custom-tab {
   margin-right: 20px; /* Adjust spacing between tabs */
 }
 
-/* Styling the tabs */
-li a {
+.custom-tab a {
   text-decoration: none;
   color: #ffffff; /* Tab text color */
   padding: 10px;
@@ -61,11 +55,17 @@ li a {
 }
 
 /* Styling for active tab */
-li a.active {
+.custom-tab a.active {
   border-color: #2196f3; /* Blue border color for active tab */
+  border-width: 4px;
 }
 
 /* Hover effect for tabs */
-li a:hover {
+.custom-tab a:hover {
   border-color: #2196f3; /* Blue border color on hover */
 }
+
+li {
+  margin-right: 20px; /* Adjust spacing between tabs */
+}
+
