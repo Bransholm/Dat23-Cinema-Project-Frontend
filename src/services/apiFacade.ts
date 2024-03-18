@@ -15,6 +15,7 @@ interface Reservation {
   totalPrice: number;
   timeStamp: Date | null;
   ticket: string;
+  ticketAmount: number;
 }
 interface Customer {
   id: number | null;
@@ -29,6 +30,12 @@ interface Show {
   movie: string;
   date: string;
   startTime: string;
+}
+interface Price {
+  id: number | null;
+  name: string;
+  price: number;
+  percent: string;
 }
 
 async function addReservation(
@@ -51,6 +58,16 @@ async function getShows() {
   ];
 }
 
-export type { Reservation, Customer, Show };
+async function getPrices() {
+  return [
+    { id: 1, name: "standard_ticket", price: 80, percent: "" },
+    { id: 2, name: "cowboy_ticket", price: 100, percent: "" },
+    { id: 3, name: "sofa_ticket", price: 120, percent: "" },
+    { id: 4, name: "group_discount", price: 0, percent: "7" },
+    { id: 5, name: "reservation_fee", price: 30, percent: "" },
+  ];
+}
+
+export type { Reservation, Customer, Show, Price };
 // eslint-disable-next-line react-refresh/only-export-components
-export { addReservation, getShows };
+export { addReservation, getShows, getPrices as getTickets };

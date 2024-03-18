@@ -5,6 +5,8 @@ import {
   Reservation,
   getShows,
   addReservation,
+  Price,
+  getTickets,
 } from "../services/apiFacade";
 
 const EMPTY_RESERVATION = {
@@ -19,26 +21,57 @@ const EMPTY_RESERVATION = {
   },
   totalPrice: 0,
   timeStamp: null,
-  ticket: "", //Skal laves i backenden!!
+  ticket: "",
+  ticketAmount: 0,
 };
 
 export default function ReservationForm() {
   const [reservationFormData, setReservationFormData] =
     useState<Reservation>(EMPTY_RESERVATION);
   const [shows, setShows] = useState<Show[]>([]);
+  const [prices, setPrices] = useState<Price[]>([]);
+  const [totalPrice, setTotalprice] = useState(0);
+  const [amount, setAmount] = useState(0);
+  const [ticket, setTicket] = useState("");
   const [chosenShowId, setChosenShowId] = useState(0);
   const [showsDialogActive, setShowsDialogActive] = useState(false);
 
   useEffect(() => {
-    getShows().then((res) => setShows(res));
+    const fetchData = async () => {
+      try {
+        const showsResponse = await getShows();
+        const ticketsResponse = await getTickets(); // Assuming there's a function to fetch tickets
+        setShows(showsResponse);
+        setPrices(ticketsResponse);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  function handleShowChange(showId: number) {
-    setReservationFormData((prevFormData) => ({
-      ...prevFormData,
-      showId: showId,
-    }));
-    setChosenShowId(showId);
+  useEffect(() => {
+    handlePriceChange();
+  }, [ticket, amount, prices, handlePriceChange]);
+
+  function handlePriceChange() {
+    let price = 0;
+    for (let i = 0; i < prices.length; i++) {
+      if (prices[i].name === ticket) {
+        price += prices[i].price;
+      }
+      if (amount && amount != 0) {
+        price *= amount;
+        if (amount <= 5 && prices[i].name === "reservation_fee") {
+          price += prices[i].price;
+        } else if (amount >= 10 && prices[i].name === "group_discount") {
+          const discount = parseFloat(prices[i].percent.replace("%", ""));
+          price -= (price * discount) / 100;
+        }
+      }
+    }
+    setTotalprice(price);
   }
 
   const ShowsList = () => {
@@ -55,6 +88,13 @@ export default function ReservationForm() {
       </ul>
     );
   };
+  function handleShowChange(showId: number) {
+    setReservationFormData((prevFormData) => ({
+      ...prevFormData,
+      showId: showId,
+    }));
+    setChosenShowId(showId);
+  }
 
   const handleReservationFormChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -64,6 +104,8 @@ export default function ReservationForm() {
       ...prevFormData,
       [name]: value,
     }));
+    setTicket(value);
+    setAmount(reservationFormData.ticketAmount);
   };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -94,11 +136,13 @@ export default function ReservationForm() {
         </button>
         <h4>Valgt show: {chosenShowId}</h4>
         {/* Ticket options */}
+        <h4>Billet:</h4>
         <input
           type="radio"
           name="ticket"
           id="cowboy_ticket"
           value="cowboy_ticket"
+          onChange={handleReservationFormChange}
         />
         <label htmlFor="cowboy_ticket">Cowboy-billet</label>
         <input
@@ -106,6 +150,7 @@ export default function ReservationForm() {
           name="ticket"
           id="sofa_ticket"
           value="sofa_ticket"
+          onChange={handleReservationFormChange}
         />
         <label htmlFor="sofa_ticket">Sofa-billet</label>
         <input
@@ -113,35 +158,41 @@ export default function ReservationForm() {
           name="ticket"
           id="standard_ticket"
           value="standard_ticket"
+          onChange={handleReservationFormChange}
         />
         <label htmlFor="standard_ticket">Standard-billet</label>
         {/* Amount */}
-        <label htmlFor="ticketAmount"></label>
-        <input type="number" name="ticketAmount" id="ticketAmount" />
+        <label htmlFor="ticketAmount">Antal billetter:</label>
+        <input
+          type="number"
+          name="ticket_amount"
+          id="ticket_amount"
+          onChange={handleReservationFormChange}
+        />
         {/* Customer */}
         <h3>Customer</h3>
-        <label htmlFor="firstName">First Name: </label>
+        <label htmlFor="firstName">Fornavn:</label>
         <input
           type="text"
           name="firstName"
           id="firstName"
           onChange={handleReservationFormChange}
         />
-        <label htmlFor="lastName">Last Name: </label>
+        <label htmlFor="lastName">Efternavn:</label>
         <input
           type="text"
           name="lastName"
           id="lastName"
           onChange={handleReservationFormChange}
         />
-        <label htmlFor="lastName">Last Name: </label>
+        <label htmlFor="email">Email:</label>
         <input
           type="text"
           name="email"
           id="email"
           onChange={handleReservationFormChange}
         />
-        <label htmlFor="phoneNumber">Last Name: </label>
+        <label htmlFor="phoneNumber">Telefon:</label>
         <input
           type="number"
           name="phoneNumber"
@@ -151,16 +202,14 @@ export default function ReservationForm() {
         <button className="reservation-form-submit-btn" onClick={handleSubmit}>
           Submit
         </button>
-
-        {/* Dialog for shows */}
-        {showsDialogActive && (
-          <dialog id="showsDialog">
-            <h2>Alle shows!</h2>
-            <ShowsList></ShowsList>
-            <button onClick={handleCloseDialog}>X</button>
-          </dialog>
-        )}
       </form>
+      <h3>Total: {totalPrice} kr.</h3>
+      {/* Dialog for shows */}
+      <dialog id="showsDialog" open={showsDialogActive}>
+        <h2>Alle shows!</h2>
+        <ShowsList></ShowsList>
+        <button onClick={handleCloseDialog}>X</button>
+      </dialog>
     </>
   );
 }
