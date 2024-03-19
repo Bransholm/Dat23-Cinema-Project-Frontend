@@ -10,6 +10,7 @@ interface Reservation {
   time_stamp: Date | null;
   ticket: string;
   ticket_amount: number;
+  isDeleted: boolean;
 }
 interface Customer {
   id: number | null;
@@ -30,6 +31,10 @@ interface Price {
   name: string;
   price: number;
   percent: number;
+}
+
+async function getRerservations(): Promise<Array<Reservation>> {
+  return fetch(RESERVATION_URL).then(handleHttpErrors);
 }
 
 async function addReservation(
@@ -97,4 +102,4 @@ async function getPrices() {
 
 export type { Reservation, Customer, Show, Price };
 // eslint-disable-next-line react-refresh/only-export-components
-export { addReservation, getShows, getPrices, getCustomers };
+export { addReservation, getShows, getPrices, getCustomers, getRerservations };
