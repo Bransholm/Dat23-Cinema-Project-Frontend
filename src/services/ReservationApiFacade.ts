@@ -10,7 +10,6 @@ interface Reservation {
   time_stamp: Date | null;
   ticket: string;
   ticket_amount: number;
-  isDeleted: boolean;
 }
 interface Customer {
   id: number | null;
