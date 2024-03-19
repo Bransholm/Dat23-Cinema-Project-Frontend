@@ -57,7 +57,10 @@ export default function ReservationList() {
     e.preventDefault();
     const reservationsAfterDeletion: Array<Reservation> = [];
     for (let i = 0; i < reservations.length; i++) {
-      if (reservations[i].id != Number(e.currentTarget.value)) {
+      if (
+        reservations[i] != undefined &&
+        reservations[i].id != Number(e.currentTarget.value)
+      ) {
         reservationsAfterDeletion[i] = reservations[i];
       }
     }
