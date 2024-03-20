@@ -15,8 +15,8 @@ import { useLocation } from "react-router-dom";
 
 const EMPTY_RESERVATION = {
   id: null,
-  show_id: null,
-  customer_id: null,
+  show_id: 0,
+  customer_id: 0,
   total_price: 0,
   time_stamp: null,
   ticket: "",
@@ -53,10 +53,14 @@ export default function ReservationForm() {
       fetchReservation();
     }
     setIsRowClicked(false);
+    setChosenShowId(reservationFormData.show_id);
+    setChosenCustomerId(reservationFormData.customer_id);
     console.log(reservationFormData);
   }, [
     reservationId,
     reservationFormData.id,
+    reservationFormData.show_id,
+    reservationFormData.customer_id,
     reservationFormData,
     isRowClicked,
     setIsRowClicked,
@@ -191,6 +195,7 @@ export default function ReservationForm() {
           id="cowboy_ticket"
           value="cowboy_ticket"
           onChange={handleReservationFormChange}
+          checked={reservationFormData.ticket === "cowboy_ticket"}
         />
         <label htmlFor="cowboy_ticket">Cowboy-billet</label>
         <input
@@ -199,6 +204,7 @@ export default function ReservationForm() {
           id="sofa_ticket"
           value="sofa_ticket"
           onChange={handleReservationFormChange}
+          checked={reservationFormData.ticket === "sofa_ticket"}
         />
         <label htmlFor="sofa_ticket">Sofa-billet</label>
         <input
@@ -207,6 +213,7 @@ export default function ReservationForm() {
           id="standard_ticket"
           value="standard_ticket"
           onChange={handleReservationFormChange}
+          checked={reservationFormData.ticket === "standard_ticket"}
         />
         <label htmlFor="standard_ticket">Standard-billet</label>
         {/* Amount */}
@@ -216,6 +223,7 @@ export default function ReservationForm() {
           name="ticket_amount"
           id="ticket_amount"
           onChange={handleReservationFormChange}
+          value={reservationFormData.ticket_amount}
         />
         <button id="choose-customer-btn" onClick={handleCustomersDialogClick}>
           Vælg kunde

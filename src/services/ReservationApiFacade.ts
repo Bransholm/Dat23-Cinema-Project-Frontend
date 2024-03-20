@@ -4,8 +4,8 @@ const RESERVATION_URL = API_URL + "/reservations";
 
 interface Reservation {
   id: number | null;
-  show_id: number | null;
-  customer_id: number | null;
+  show_id: number;
+  customer_id: number;
   total_price: number;
   time_stamp: Date | null;
   ticket: string;

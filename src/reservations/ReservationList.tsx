@@ -33,7 +33,7 @@ export default function ReservationList() {
         <td>{}</td>
         <td>{reservation.ticket}</td>
         <td>{reservation.ticket_amount}</td>
-        <td>{reservation.total_price}</td>
+        <td>{reservation.total_price} kr.</td>
         <td>
           <button value={`${reservation.id}`}>Redigér</button>
         </td>
