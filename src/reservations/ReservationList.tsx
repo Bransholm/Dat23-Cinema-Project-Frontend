@@ -3,20 +3,14 @@ import "./ReservationsLayout.css";
 import { useEffect, useState } from "react";
 import {
   Reservation,
-  // getCinemas,
   getRerservations,
-  // getShows,
 } from "../services/ReservationApiFacade";
 import { useNavigate } from "react-router-dom";
-// import { getTheatres } from "../services/theatreAPItest";
 
 export default function ReservationList() {
   // const auth = useAuth();
   const [reservations, setReservations] = useState<Array<Reservation>>([]);
   const [isSortAsc, setIsSortAsc] = useState(true);
-  // const [cinemaOptions, setCinemaOptions] = useState<Array<string>>([]);
-  // const [theatreOptions, setTheatreOptions] = useState<Array<string>>([]);
-  // const [showOptions, setShowOptions] = useState<Array<string>>([]);
   const nav = useNavigate();
 
   useEffect(() => {
@@ -24,42 +18,6 @@ export default function ReservationList() {
       .then((res) => setReservations(res))
       .catch(() => console.log("Error fetching reservations..."));
   }, []);
-
-  // useEffect(() => {
-  //   getShows()
-  //     .then((response) => {
-  //       const showOptArr = [];
-  //       for (const res of response) {
-  //         showOptArr.push(res.movie);
-  //       }
-  //       setShowOptions(showOptArr);
-  //     })
-  //     .catch(() => console.log(""));
-  // }, [showOptions, setShowOptions]);
-
-  // useEffect(() => {
-  //   getCinemas()
-  //     .then((response) => {
-  //       const cinemaOptArr = [];
-  //       for (const res of response) {
-  //         cinemaOptArr.push(res.name);
-  //       }
-  //       setCinemaOptions(cinemaOptArr);
-  //     })
-  //     .catch(() => console.log(""));
-  // }, [cinemaOptions, setCinemaOptions]);
-
-  // useEffect(() => {
-  //   getTheatres()
-  //     .then((response) => {
-  //       const theatreOptArr = [];
-  //       for (const res of response) {
-  //         theatreOptArr.push(res.name);
-  //       }
-  //       setTheatreOptions(theatreOptArr);
-  //     })
-  //     .catch(() => console.log(""));
-  // }, [theatreOptions, setTheatreOptions]);
 
   useEffect(() => {});
   function handleEditReservationClick(reservation: Reservation) {
@@ -123,42 +81,8 @@ export default function ReservationList() {
     setReservations(reservationsAfterDeletion);
   }
 
-  // const showOptionsRender = () => {
-  //   return showOptions.map((showOption) => (
-  //     <option key={showOption} value={showOption}>
-  //       {showOption}
-  //     </option>
-  //   ));
-  // };
-  // const theatreOptionsRender = () => {
-  //   return theatreOptions.map((theatreOptions) => (
-  //     <option key={theatreOptions} value={theatreOptions}>
-  //       {theatreOptions}
-  //     </option>
-  //   ));
-  // };
-  // const cinemaOptionsRender = () => {
-  //   return cinemaOptions.map((cinemaOptions) => (
-  //     <option key={cinemaOptions} value={cinemaOptions}>
-  //       {cinemaOptions}
-  //     </option>
-  //   ));
-  // };
-
-  // function handleFilterChange(){
-
-  // }
-
   return (
     <>
-      <div id="filter-section">
-        <h4>Filtrér:</h4>
-        <select name="cinema-select" id="cinema-select"></select>
-        <select name="theatre-select" id="theatre-select"></select>
-        <select name="show-select" id="show-select">
-          {/* {showOptionsRender()} */}
-        </select>
-      </div>
       <table id="reservations-table">
         <thead>
           <tr>
