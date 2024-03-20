@@ -15,11 +15,14 @@ export default function NavHeader() {
         Gå Tilbage
       </button>
       <ul>
-        <li>
+        <li className="custom-tab">
           <NavLink to="/">Home/Forestillinger</NavLink>
         </li>
-        <li>
+        <li className="custom-tab">
           <NavLink to="/reservations">Reservations</NavLink>
+        </li>
+        <li className="custom-tab">
+          <NavLink to="/shows">Shows</NavLink>
         </li>
         {/* <AuthStatus /> */}
       </ul>
