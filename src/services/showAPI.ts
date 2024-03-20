@@ -31,6 +31,21 @@ interface showInterface {
   startTime: string;
 }
 
+interface ShowInterfaceTheatre {
+  id: number | null;
+  theatre: {
+    id: number;
+    name: string;
+  };
+  movie: {
+    id: number;
+    title: string;
+    duration: number;
+  };
+  date: string;
+  startTime: string;
+}
+
 
 
 
@@ -51,13 +66,13 @@ async function theatreData() {
   return theatres;
 }
 
-async function getShows(): Promise<Array<show>> {
+async function getShows(): Promise<Array<show | showInterface | ShowInterfaceTheatre>> {
   console.log("fetchShows");
   // Fetch data from the API URL and handle any HTTP errors.
   return fetch(SHOWS_URL).then(handleHttpErrors);
 }
 
-async function getShow(id: number): Promise<show> {
+async function getShow(id: number): Promise<show | showInterface> {
   // if (ShowList.length > 0) return [...showList];
   return fetch(SHOWS_URL + "/" + id).then(handleHttpErrors);
 }
@@ -76,7 +91,7 @@ async function deleteShow(id: number): Promise<show> {
 
 
 
-export type { show, showInterface};
+export type { show, showInterface, ShowInterfaceTheatre};
 
 // Export the getShows function to use it in other modules.
 export { getShows, getShow, addShow, deleteShow, movieData, theatreData};
