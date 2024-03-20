@@ -19,15 +19,15 @@ export default function ReservationList() {
       .catch(() => console.log("Error fetching reservations..."));
   }, []);
 
-  function handleRowClick(reservation: Reservation) {
+  function handleEditReservationClick(reservation: Reservation) {
     nav("/reservations/create", {
-      state: { id: reservation.id, isRowClicked: true },
+      state: { id: reservation.id, isEditReservationClicked: true },
     });
   }
 
   const reservationTableRows = reservations.map((reservation) => {
     return (
-      <tr key={reservation.id} onClick={() => handleRowClick(reservation)}>
+      <tr key={reservation.id}>
         <td>{reservation.show_id}</td>
         <td>{reservation.customer_id}</td>
         <td>{}</td>
@@ -35,7 +35,12 @@ export default function ReservationList() {
         <td>{reservation.ticket_amount}</td>
         <td>{reservation.total_price} kr.</td>
         <td>
-          <button value={`${reservation.id}`}>Redigér</button>
+          <button
+            value={`${reservation.id}`}
+            onClick={() => handleEditReservationClick(reservation)}
+          >
+            Redigér
+          </button>
         </td>
         <td>
           <button value={`${reservation.id}`} onClick={handleDeleteClick}>

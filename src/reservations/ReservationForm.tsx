@@ -26,7 +26,9 @@ const EMPTY_RESERVATION = {
 export default function ReservationForm() {
   const { state } = useLocation();
   const reservationId = state?.id;
-  const [isRowClicked, setIsRowClicked] = useState(state?.isRowClicked);
+  const [isEditReservationClicked, setIsEditReservationClicked] = useState(
+    state?.isEditReservationClicked
+  );
   const [reservationFormData, setReservationFormData] =
     useState<Reservation>(EMPTY_RESERVATION);
   const [shows, setShows] = useState<Show[]>([]);
@@ -41,29 +43,35 @@ export default function ReservationForm() {
   const [customersDialogActive, setCustomersDialogActive] = useState(false);
 
   useEffect(() => {
-    if (isRowClicked && !reservationFormData.id) {
+    if (isEditReservationClicked && !reservationFormData.id) {
       const fetchReservation = async () => {
         try {
           const fetchReservation = await getReservation(reservationId);
           setReservationFormData(fetchReservation);
+          setChosenShowId(fetchReservation.show_id);
+          setChosenCustomerId(fetchReservation.customer_id);
+          setTicket(fetchReservation.ticket);
+          setAmount(fetchReservation.ticket_amount);
+          setTotalprice(fetchReservation.total_price);
         } catch (error) {
           console.error("Error fetching reservation: " + reservationId);
         }
       };
       fetchReservation();
     }
-    setIsRowClicked(false);
-    setChosenShowId(reservationFormData.show_id);
-    setChosenCustomerId(reservationFormData.customer_id);
+    setIsEditReservationClicked(false);
     console.log(reservationFormData);
   }, [
     reservationId,
     reservationFormData.id,
-    reservationFormData.show_id,
-    reservationFormData.customer_id,
     reservationFormData,
-    isRowClicked,
-    setIsRowClicked,
+    isEditReservationClicked,
+    setIsEditReservationClicked,
+    setChosenShowId,
+    setChosenCustomerId,
+    setTicket,
+    setAmount,
+    setTotalprice,
   ]);
 
   useEffect(() => {
@@ -96,6 +104,7 @@ export default function ReservationForm() {
         if (prices[i].name === ticket) {
           price += prices[i].price;
         }
+
         if (amount <= 5 && prices[i].name === "reservation_fee") {
           price += prices[i].price;
         } else if (amount >= 10 && prices[i].name === "group_discount") {
@@ -105,6 +114,7 @@ export default function ReservationForm() {
       }
       price *= amount;
     }
+
     setTotalprice(price);
   }
 
