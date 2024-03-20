@@ -14,26 +14,12 @@
 //   theatre: {
 //     id: 0,
 //     name: "",
-//   },
-//   date: "",
-//   startTime: ""
-// };
-
-// // const EMPTY_MOVIE = {
-// //     id: null,
-// //     title: "",
-// //     duration: 0
-// //     };
-
-// // const EMPTY_THEATRE = {
-// //     id: null,
-// //     name: "",
-// //     cinema: {
-// //         id: null,
-// //         name: "",
-// //         city: "",
-// //     }
-// //     };
+//     cinema: {
+//         id: null,
+//         name: "",
+//         city: "",
+//     }
+//     };
 
 
 
@@ -247,9 +233,6 @@
 //       theatre: { id: selectedTheatreId }
 //     }));
 //   };
-
-
-
 
 // import { useState } from "react";
 // import { useLocation } from "react-router-dom";
