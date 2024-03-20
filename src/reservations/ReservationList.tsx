@@ -1,7 +1,8 @@
 // import { useAuth } from "../security/AuthProvider";
-
+import "./ReservationsLayout.css";
 import { useEffect, useState } from "react";
 import {
+  Cinema,
   Reservation,
   getRerservations,
 } from "../services/ReservationApiFacade";
@@ -11,6 +12,9 @@ export default function ReservationList() {
   // const auth = useAuth();
   const [reservations, setReservations] = useState<Array<Reservation>>([]);
   const [isSortAsc, setIsSortAsc] = useState(true);
+  const [cinemaOptions, setCinemaOptions] = useState<Array<string>>([]);
+  const [theatreOptions, setTheatreOptions] = useState<Array<string>>([]);
+  const [showOptions, setShowOptions] = useState<Array<string>>([]);
   const nav = useNavigate();
 
   useEffect(() => {
@@ -19,6 +23,9 @@ export default function ReservationList() {
       .catch(() => console.log("Error fetching reservations..."));
   }, []);
 
+  useEffect(() => {});
+
+  useEffect(() => {});
   function handleEditReservationClick(reservation: Reservation) {
     nav("/reservations/create", {
       state: { id: reservation.id, isEditReservationClicked: true },
@@ -83,42 +90,50 @@ export default function ReservationList() {
   //  function handleFilterChange(){}
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>
-            <button value="show_id" onClick={handleSortChange}>
-              Show
-            </button>
-          </th>
-          <th>
-            <button value="customer_id" onClick={handleSortChange}>
-              Customer
-            </button>
-          </th>
-          <th>
-            <button value="time_stamp" onClick={handleSortChange}>
-              Time of Creation
-            </button>
-          </th>
-          <th>
-            <button value="ticket" onClick={handleSortChange}>
-              Ticket
-            </button>
-          </th>
-          <th>
-            <button value="ticket_amount" onClick={handleSortChange}>
-              Ticket Amount
-            </button>
-          </th>
-          <th>
-            <button value="total_price" onClick={handleSortChange}>
-              Total Price
-            </button>
-          </th>
-        </tr>
-      </thead>
-      <tbody>{reservationTableRows}</tbody>
-    </table>
+    <>
+      <div id="filter-section">
+        <h4>Filtrér:</h4>
+        <select name="cinema-select" id="cinema-select"></select>
+        <select name="theatre-select" id="theatre-select"></select>
+        <select name="show-select" id="show-select"></select>
+      </div>
+      <table id="reservations-table">
+        <thead>
+          <tr>
+            <th>
+              <button value="show_id" onClick={handleSortChange}>
+                Forestilling
+              </button>
+            </th>
+            <th>
+              <button value="customer_id" onClick={handleSortChange}>
+                Kunde
+              </button>
+            </th>
+            <th>
+              <button value="time_stamp" onClick={handleSortChange}>
+                Oprettelsesdato
+              </button>
+            </th>
+            <th>
+              <button value="ticket" onClick={handleSortChange}>
+                Billet
+              </button>
+            </th>
+            <th>
+              <button value="ticket_amount" onClick={handleSortChange}>
+                Billet antal
+              </button>
+            </th>
+            <th>
+              <button value="total_price" onClick={handleSortChange}>
+                Totale pris
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>{reservationTableRows}</tbody>
+      </table>
+    </>
   );
 }

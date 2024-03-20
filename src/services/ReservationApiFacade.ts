@@ -31,6 +31,11 @@ interface Price {
   price: number;
   percent: number;
 }
+interface Cinema {
+  id: number | null;
+  city: string;
+  name: string;
+}
 
 async function getRerservations(): Promise<Array<Reservation>> {
   return fetch(RESERVATION_URL).then(handleHttpErrors);
@@ -103,7 +108,7 @@ async function getPrices() {
   ];
 }
 
-export type { Reservation, Customer, Show, Price };
+export type { Reservation, Customer, Show, Price, Cinema };
 // eslint-disable-next-line react-refresh/only-export-components
 export {
   addReservation,

@@ -20,14 +20,13 @@
 .page-content {
   grid-column: 2 / -2; /* Span across middle columns */
   grid-row: 2; /* Start from second row */
-  padding: 2rem;
+  padding: 2em;
 }
 
 /* Blue details */
 .nav-header {
   border-bottom: 2px solid #2196f3; /* Blue border bottom for header */
 }
-
 
 /* layout.css */
 nav {
@@ -40,7 +39,6 @@ ul {
   padding: 0;
   display: flex;
 }
-
 
 .custom-tab {
   margin-right: 20px; /* Adjust spacing between tabs */
@@ -68,4 +66,3 @@ ul {
 li {
   margin-right: 20px; /* Adjust spacing between tabs */
 }
-
