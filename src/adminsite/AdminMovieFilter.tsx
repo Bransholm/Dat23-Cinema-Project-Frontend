@@ -1,47 +1,50 @@
 import React, { useState, useEffect } from "react";
 import UserTable from "./AdminMovieTable";
-import { MoviesList } from "./MoviesData";
-
-interface Movie {
-  id: number;
-  title: string;
-  duration: number;
-  is3D: boolean;
-  isActive: boolean;
-}
+import getMovies from "./AdminMovieAPI/AdminMovieRead";
+import { Movie } from "./MoviesData";
 
 export default function MovieFilter() {
-  // ...
-  const [movieList, setMovieList] = useState<Movie[]>(MoviesList);
-
-  const handleEdit = (id, updatedMovie) => {
-    const updatedMovieList = movieList.map((movie) => {
-      if (movie.id === id) {
-        return updatedMovie;
-      }
-      return movie;
-    });
-    setMovieList(updatedMovieList);
-  };
-
-  const handleDelete = (id) => {
-    const updatedMovieList = movieList.filter((movie) => movie.id !== id);
-    setMovieList(updatedMovieList);
-  };
+  // const [movieList, setMovieList] = useState<Movie[]>(MoviesList);
+  // const [fetchedMovies, setFetchedMovies] = useState<Movie[]>([]);
+  const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
 
   // UseStates that stores the selected filtere and sort options
   const [durationFilter, setDurationFilter] = useState<string>("");
   const [isActiveFilter, setIsActiveFilter] = useState<string>("");
   const [is3dFilter, setIs3dFilter] = useState<string>("");
   const [sortOption, setSortOption] = useState<string>("");
-  const [filteredMovies, setFilteredMovies] = useState<Movie[]>(MoviesList);
+
+  useEffect(() => {
+    getMovies()
+      .then((movies) => {
+        setFilteredMovies(movies);
+      })
+      .catch((error) => {
+        console.error("Error fetching movies: ", error);
+      });
+  }, []);
 
   useEffect(() => {
     filterMovies();
   }, [durationFilter, isActiveFilter, is3dFilter, sortOption]);
 
+  const handleEdit = (id, updatedMovie) => {
+    const updatedMovieList = filteredMovies.map((movie) => {
+      if (movie.id === id) {
+        return updatedMovie;
+      }
+      return movie;
+    });
+    setFilteredMovies(updatedMovieList);
+  };
+
+  const handleDelete = (id) => {
+    const updatedMovieList = filteredMovies.filter((movie) => movie.id !== id);
+    setFilteredMovies(updatedMovieList);
+  };
+
   const filterMovies = () => {
-    let filtered = MoviesList;
+    let filtered = filteredMovies.slice();
 
     // Her bliver film-listen sorteret på baggrund af alle filtrene
     if (durationFilter === "120+") {
@@ -51,9 +54,9 @@ export default function MovieFilter() {
     }
 
     if (isActiveFilter === "active") {
-      filtered = filtered.filter((movie) => movie.isActive);
+      filtered = filtered.filter((movie) => movie.active);
     } else if (isActiveFilter === "inactive") {
-      filtered = filtered.filter((movie) => !movie.isActive);
+      filtered = filtered.filter((movie) => !movie.active);
     }
 
     if (is3dFilter === "3D") {
@@ -138,7 +141,8 @@ export default function MovieFilter() {
           </select>
         </label>
       </div>
-      <UserTable moviesList={filteredMovies}
+      <UserTable
+        moviesList={filteredMovies}
         // moviesList={moviesList}
         onEdit={handleEdit}
         onDelete={handleDelete}
