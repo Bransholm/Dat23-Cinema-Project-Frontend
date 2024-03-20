@@ -66,15 +66,36 @@ export default function ShowList() {
     setSortByDate(!sortByDate);
   };
 
+  // const handleDateFilter = (selectedDate: string) => {
+  //   const filtered = shows.filter((show) => show.date === selectedDate);
+  //   setFilteredShows(filtered);
+  // };
+
+  // const handleMovieFilter = (selectedMovie: string) => {
+  //   const filtered = shows.filter((show) => show.movie.title === selectedMovie);
+  //   setFilteredShows(filtered);
+  // };
+
   const handleDateFilter = (selectedDate: string) => {
-    const filtered = shows.filter((show) => show.date === selectedDate);
-    setFilteredShows(filtered);
+    if (selectedDate === "") {
+      setDateOptions([]);
+      setFilteredShows(shows); // Reset filtered shows to the original list
+    } else {
+      const filtered = shows.filter((show) => show.date === selectedDate);
+      setFilteredShows(filtered);
+    }
   };
 
   const handleMovieFilter = (selectedMovie: string) => {
-    const filtered = shows.filter((show) => show.movie.title === selectedMovie);
-    setFilteredShows(filtered);
+    if (selectedMovie === "") {
+      setMovieOptions([]);
+      setFilteredShows(shows); // Reset filtered shows to the original list
+    } else {
+      const filtered = shows.filter((show) => show.movie.title === selectedMovie);
+      setFilteredShows(filtered);
+    }
   };
+
 
   const showListItems = filteredShows.map((show) => (
     <li key={show.id} className="show-list-item">
