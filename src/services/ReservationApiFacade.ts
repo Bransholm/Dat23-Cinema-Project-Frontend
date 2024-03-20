@@ -36,6 +36,10 @@ async function getRerservations(): Promise<Array<Reservation>> {
   return fetch(RESERVATION_URL).then(handleHttpErrors);
 }
 
+async function getReservation(id: number): Promise<Reservation> {
+  return fetch(RESERVATION_URL + "/" + id).then(handleHttpErrors);
+}
+
 async function addReservation(
   newReservation: Reservation
 ): Promise<Reservation> {
@@ -101,4 +105,11 @@ async function getPrices() {
 
 export type { Reservation, Customer, Show, Price };
 // eslint-disable-next-line react-refresh/only-export-components
-export { addReservation, getShows, getPrices, getCustomers, getRerservations };
+export {
+  addReservation,
+  getShows,
+  getPrices,
+  getCustomers,
+  getRerservations,
+  getReservation,
+};
