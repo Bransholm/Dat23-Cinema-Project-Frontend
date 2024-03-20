@@ -80,8 +80,6 @@ export default function ReservationList() {
     setReservations(reservationsAfterDeletion);
   }
 
-  //   function handleEditClick(){}
-
   //  function handleFilterChange(){}
 
   return (
