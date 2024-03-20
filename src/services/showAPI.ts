@@ -8,16 +8,30 @@ const SHOWS_URL = API_URL + "/shows";
 interface show {
   id: number | null;
   theatre: {
-    id: number ;
+    id: number;
   };
   movie: {
-    id: number ;
+    id: number;
+  };
+  date: string;
+  startTime: string;
+}
+
+interface showInterface {
+  id: number | null;
+  theatre: {
+    id: number;
+  };
+  movie: {
+    id: number;
     title: string;
     duration: number;
   };
   date: string;
   startTime: string;
 }
+
+
 
 
 // let showList: Array<Show> = [];
@@ -62,7 +76,7 @@ async function deleteShow(id: number): Promise<show> {
 
 
 
-export type { show };
+export type { show, showInterface};
 
 // Export the getShows function to use it in other modules.
 export { getShows, getShow, addShow, deleteShow, movieData, theatreData};

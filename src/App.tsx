@@ -4,6 +4,7 @@ import Login from "./security/Login";
 import Layout from "./Layout";
 import ShowList from "./shows/ShowList";
 import Show from "./shows/Show";
+import ShowFormCreate from "./shows/ShowFormCreate";
 
 
 
@@ -16,6 +17,7 @@ function App() {
         <Route path="/shows" element={<ShowList/>} />
         <Route path="/shows/:id" element={<Show />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/shows/create" element={<ShowFormCreate />} />
       </Routes>
     </Layout>
   );

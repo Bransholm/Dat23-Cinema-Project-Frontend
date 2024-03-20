@@ -1,12 +1,14 @@
+//@ts-nocheck
+
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getShow, show as showInterface } from "../services/showAPI";
+import { getShow,  showInterface } from "../services/showAPI";
 
 export default function Show() {
   const { id } = useParams();
-//   console.log("id", id);
+//   console.log("id", id); 
 
-  const [show, setShow] = useState<showInterface | null>(null);
+  const [show, setShow] = useState<showInterface| null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -23,7 +25,7 @@ export default function Show() {
     <>
       {show ? (
         <>
-          <h2>Show {show?.movie.title}</h2>
+          <h2>{show?.movie.title}: {show.date}</h2>
           <div>
             <strong>Show ID:</strong> {show.id} <br />
             <strong>Date:</strong> {show.date} <br />
