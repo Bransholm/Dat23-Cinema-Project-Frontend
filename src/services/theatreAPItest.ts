@@ -8,11 +8,7 @@ const THEATRES_URL = API_URL + "/theatres";
 interface theatre {
   id: number;
   name: string;
-    cinema: {
-        id: number;
-        name: string;
-        city: string;
-    };
+   
 }
 
 async function getTheatres(): Promise<Array<theatre>> {

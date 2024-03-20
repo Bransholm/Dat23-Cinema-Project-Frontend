@@ -1,8 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getShows, show as showInterface } from "../services/showAPI";
+import { getShows} from "../services/showAPI";
 import "./showStyle.css"; 
 
+interface showInterface {
+  id: number | null;
+  theatre: {
+    id: number;
+  };
+  movie: {
+    id: number;
+    title: string;
+    duration: number;
+  };
+  date: string;
+  startTime: string;
+}
 
 
 export default function ShowList() {
@@ -11,7 +24,7 @@ export default function ShowList() {
 
   useEffect(() => {
     getShows()
-      .then((res) => setShow(res))
+      .then((res) => setShow(res as showInterface[]))
       .catch(() => setError("Show not fetched"));
   }, []);
 

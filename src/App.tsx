@@ -6,6 +6,7 @@ import ReservationForm from "./reservations/ReservationForm";
 import ReservationsLayout from "./reservations/ReservationsLayout";
 import ShowList from "./shows/ShowList";
 import Show from "./shows/Show";
+import ShowFormCreate from "./shows/ShowFormCreate";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/shows" element={<ShowList />} />
         <Route path="/shows/:id" element={<Show />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/shows/create" element={<ShowFormCreate />} />
       </Routes>
     </Layout>
   );
