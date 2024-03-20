@@ -9,7 +9,9 @@ import {
   getPrices,
   Customer,
   getCustomers,
+  getReservation,
 } from "../services/ReservationApiFacade";
+import { useLocation } from "react-router-dom";
 
 const EMPTY_RESERVATION = {
   id: null,
@@ -22,6 +24,9 @@ const EMPTY_RESERVATION = {
 };
 
 export default function ReservationForm() {
+  const { state } = useLocation();
+  const reservationId = state?.id;
+  const [isRowClicked, setIsRowClicked] = useState(state?.isRowClicked);
   const [reservationFormData, setReservationFormData] =
     useState<Reservation>(EMPTY_RESERVATION);
   const [shows, setShows] = useState<Show[]>([]);
@@ -34,6 +39,28 @@ export default function ReservationForm() {
   const [chosenCustomerId, setChosenCustomerId] = useState(0);
   const [showsDialogActive, setShowsDialogActive] = useState(false);
   const [customersDialogActive, setCustomersDialogActive] = useState(false);
+
+  useEffect(() => {
+    if (isRowClicked && !reservationFormData.id) {
+      const fetchReservation = async () => {
+        try {
+          const fetchReservation = await getReservation(reservationId);
+          setReservationFormData(fetchReservation);
+        } catch (error) {
+          console.error("Error fetching reservation: " + reservationId);
+        }
+      };
+      fetchReservation();
+    }
+    setIsRowClicked(false);
+    console.log(reservationFormData);
+  }, [
+    reservationId,
+    reservationFormData.id,
+    reservationFormData,
+    isRowClicked,
+    setIsRowClicked,
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {

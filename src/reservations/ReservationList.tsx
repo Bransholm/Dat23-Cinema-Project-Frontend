@@ -5,11 +5,13 @@ import {
   Reservation,
   getRerservations,
 } from "../services/ReservationApiFacade";
+import { useNavigate } from "react-router-dom";
 
 export default function ReservationList() {
   // const auth = useAuth();
   const [reservations, setReservations] = useState<Array<Reservation>>([]);
   const [isSortAsc, setIsSortAsc] = useState(true);
+  const nav = useNavigate();
 
   useEffect(() => {
     getRerservations()
@@ -17,9 +19,15 @@ export default function ReservationList() {
       .catch(() => console.log("Error fetching reservations..."));
   }, []);
 
+  function handleRowClick(reservation: Reservation) {
+    nav("/reservations/create", {
+      state: { id: reservation.id, isRowClicked: true },
+    });
+  }
+
   const reservationTableRows = reservations.map((reservation) => {
     return (
-      <tr key={reservation.id}>
+      <tr key={reservation.id} onClick={() => handleRowClick(reservation)}>
         <td>{reservation.show_id}</td>
         <td>{reservation.customer_id}</td>
         <td>{}</td>
@@ -27,7 +35,7 @@ export default function ReservationList() {
         <td>{reservation.ticket_amount}</td>
         <td>{reservation.total_price}</td>
         <td>
-          <button>Redigér</button>
+          <button value={`${reservation.id}`}>Redigér</button>
         </td>
         <td>
           <button value={`${reservation.id}`} onClick={handleDeleteClick}>
