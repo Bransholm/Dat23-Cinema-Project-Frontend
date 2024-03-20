@@ -5,7 +5,7 @@ import {
   Reservation,
   // getCinemas,
   getRerservations,
-  getShows,
+  // getShows,
 } from "../services/ReservationApiFacade";
 import { useNavigate } from "react-router-dom";
 // import { getTheatres } from "../services/theatreAPItest";
@@ -16,7 +16,7 @@ export default function ReservationList() {
   const [isSortAsc, setIsSortAsc] = useState(true);
   // const [cinemaOptions, setCinemaOptions] = useState<Array<string>>([]);
   // const [theatreOptions, setTheatreOptions] = useState<Array<string>>([]);
-  const [showOptions, setShowOptions] = useState<Array<string>>([]);
+  // const [showOptions, setShowOptions] = useState<Array<string>>([]);
   const nav = useNavigate();
 
   useEffect(() => {
@@ -25,17 +25,17 @@ export default function ReservationList() {
       .catch(() => console.log("Error fetching reservations..."));
   }, []);
 
-  useEffect(() => {
-    getShows()
-      .then((response) => {
-        const showOptArr = [];
-        for (const res of response) {
-          showOptArr.push(res.movie);
-        }
-        setShowOptions(showOptArr);
-      })
-      .catch(() => console.log(""));
-  }, [showOptions, setShowOptions]);
+  // useEffect(() => {
+  //   getShows()
+  //     .then((response) => {
+  //       const showOptArr = [];
+  //       for (const res of response) {
+  //         showOptArr.push(res.movie);
+  //       }
+  //       setShowOptions(showOptArr);
+  //     })
+  //     .catch(() => console.log(""));
+  // }, [showOptions, setShowOptions]);
 
   // useEffect(() => {
   //   getCinemas()
@@ -123,13 +123,13 @@ export default function ReservationList() {
     setReservations(reservationsAfterDeletion);
   }
 
-  const showOptionsRender = () => {
-    return showOptions.map((showOption) => (
-      <option key={showOption} value={showOption}>
-        {showOption}
-      </option>
-    ));
-  };
+  // const showOptionsRender = () => {
+  //   return showOptions.map((showOption) => (
+  //     <option key={showOption} value={showOption}>
+  //       {showOption}
+  //     </option>
+  //   ));
+  // };
   // const theatreOptionsRender = () => {
   //   return theatreOptions.map((theatreOptions) => (
   //     <option key={theatreOptions} value={theatreOptions}>
@@ -156,7 +156,7 @@ export default function ReservationList() {
         <select name="cinema-select" id="cinema-select"></select>
         <select name="theatre-select" id="theatre-select"></select>
         <select name="show-select" id="show-select">
-          {showOptionsRender()}
+          {/* {showOptionsRender()} */}
         </select>
       </div>
       <table id="reservations-table">
