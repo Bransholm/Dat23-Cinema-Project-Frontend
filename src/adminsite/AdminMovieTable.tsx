@@ -41,7 +41,7 @@ export default function UserTable({
       setUpdatedActors(movieToEdit.actors);
       setUpdatedDuration(movieToEdit.duration);
       setUpdatedGenre(movieToEdit.genre);
-      setUpdatedIs3D(movieToEdit.is3D);
+      setUpdatedIs3D(movieToEdit.threeD);
       setUpdatedIsActive(movieToEdit.active);
     }
   };
@@ -69,7 +69,7 @@ export default function UserTable({
         actors: updatedActors,
         duration: updatedDuration,
         genre: updatedGenre,
-        is3D: updatedIs3D,
+        threeD: updatedIs3D,
         active: updatedIsActive,
       };
 
@@ -97,7 +97,7 @@ export default function UserTable({
         actors: updatedActors,
         duration: updatedDuration,
         genre: updatedGenre,
-        is3D: updatedIs3D,
+        threeD: updatedIs3D,
         active: updatedIsActive,
       };
 
@@ -143,13 +143,13 @@ export default function UserTable({
               <td>{movie.actors}</td>
               <td>{movie.duration}</td>
               <td>{movie.genre}</td>
-              <td>{movie.is3D ? "Active" : "Inactive"}</td>
-              <td>{movie.isActive ? "Active" : "Inactive"}</td>
+              <td>{movie.threeD ? "Active" : "Inactive"}</td>
+              <td>{movie.active ? "Active" : "Inactive"}</td>
               <td>
-                <button onClick={() => handleEditClick(movie.id)}>
+                <button onClick={() => handleEditClick(movie.id ?? 0)}>
                   Opdater
                 </button>
-                <button onClick={() => onDelete(movie.id)}>Slet</button>
+                <button onClick={() => onDelete(movie.id ?? 0)}>Slet</button>
               </td>
             </tr>
           ))}
