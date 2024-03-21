@@ -3,8 +3,6 @@ import { Movie } from "./MoviesData.ts";
 import MoviePutRoute from "./AdminMovieAPI/AdminMoviePut.ts";
 import MoviePostRoute from "./AdminMovieAPI/AdminMoviePost.ts";
 import getMovies from "./AdminMovieAPI/AdminMovieRead.ts";
-// import fetchMovie from "./AdminMovieFilter.tsx"
-// import {setFilteredMovies} from "./AdminMovieFilter.tsx"
 
 interface MovieTableProps {
   moviesList: Movie[];
@@ -19,7 +17,7 @@ export default function UserTable({
 }: MovieTableProps) {
   // Stores the movie chosen to be updated
   const [editMovie, setEditMovie] = useState<Movie | null>(null);
-  // -------- Values below are all the movie values from the update-movie-form (Habing use state for every value, makes it a 'controlled' form).
+  // -------- Values below are all the movie values from the update-movie-form (Having use state for every value, makes it a 'controlled' form).
   const [updatedTitle, setUpdatedTitle] = useState<string>("");
   const [updatedDescription, setUpdatedDescription] = useState<string>("");
   const [updatedActors, setUpdatedActors] = useState<string>("");
@@ -31,7 +29,7 @@ export default function UserTable({
   // Takes the id number from the item-clicked and find the movie with the same id.
   const handleEditClick = (id: number) => {
     const movieToEdit = moviesList.find((movie) => movie.id === id);
-    console.log("Handle Edit - id", id, " movie: ", movieToEdit);
+    // Checks if the movieToEdit state is true.  If it is it sets states of all the attributes to those of the selected movie-object
     if (movieToEdit) {
       setEditMovie(movieToEdit);
       setUpdatedTitle(movieToEdit.title);
@@ -58,8 +56,11 @@ export default function UserTable({
     setEditMovie(null);
   };
 
+  // When the "submit-button" is pressed this function updates or creates a movie.
   const handleSaveMovie = () => {
+    // If editMovie is true a movie is updated. 
     if (editMovie) {
+      // Here the updatedMovie object is set and parsed to the MoviePutRoute.
       const updatedMovie: Movie = {
         ...editMovie,
         title: updatedTitle,
@@ -74,9 +75,12 @@ export default function UserTable({
       MoviePutRoute(updatedMovie)
         .then((updateMovieFromServer) => {
           onEdit(editMovie.id!, updateMovieFromServer);
+          
+          // Sets the editMovie to null after the update is complete.  
           setEditMovie(null);
           resetForm();
-
+          
+          // Here the movie table is refreshed.  
           getMovies()
             .then((movies) => {
               setFilteredMovies(movies);
@@ -88,6 +92,8 @@ export default function UserTable({
         .catch((error) => {
           console.error("Error update movie - ", error);
         });
+
+    // If editMovie is false a new movie is created. 
     } else {
       const newMovie: Movie = {
         title: updatedTitle,
@@ -102,19 +108,20 @@ export default function UserTable({
       MoviePostRoute(newMovie)
         .then((createdMovieFromServer) => {
           console.log(createdMovieFromServer);
+          // Here the movie table is refreshed.
           getMovies()
-          .then((movies) => {
-            setFilteredMovies(movies);
-          })
-          .catch((error) => {
-            console.error("Error fetching movies ", error);
-          });
+            .then((movies) => {
+              setFilteredMovies(movies);
+            })
+            .catch((error) => {
+              console.error("Error fetching movies ", error);
+            });
         })
         .catch((error) => {
           console.error("Error creating a new movie: - ", error);
         });
-      }
-      resetForm();
+    }
+    resetForm();
   };
 
   return (
@@ -153,6 +160,7 @@ export default function UserTable({
       </table>
       <form>
         <div className="dialog">
+          // Sets the text of the depending on editMovie is true or false;
           <h2>{editMovie ? "Opdater Film Data" : "Opret Ny Film"}</h2>
           <label>
             Titel:
@@ -200,7 +208,7 @@ export default function UserTable({
             />
           </label>
           <label>
-            3D Film
+            3D Film:
             <input
               type="checkbox"
               name="is3D"
@@ -209,7 +217,7 @@ export default function UserTable({
             />
           </label>
           <label>
-            Aktiv Film
+            Aktiv Film:
             <input
               type="checkbox"
               name="isActive"
