@@ -38,8 +38,8 @@ export default function ReservationForm() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [prices, setPrices] = useState<Price[]>([]);
   const [totalPrice, setTotalprice] = useState(0);
-  const [amount, setAmount] = useState(0);
-  const [ticket, setTicket] = useState("");
+  const [choseAmount, setChosenAmount] = useState(0);
+  const [chosenTicket, setChosenTicket] = useState("");
   const [chosenShowId, setChosenShowId] = useState(0);
   const [chosenCustomerId, setChosenCustomerId] = useState(0);
   const [showsDialogActive, setShowsDialogActive] = useState(false);
@@ -53,8 +53,8 @@ export default function ReservationForm() {
           setReservationFormData(fetchReservation);
           setChosenShowId(fetchReservation.show_id);
           setChosenCustomerId(fetchReservation.customer_id);
-          setTicket(fetchReservation.ticket);
-          setAmount(fetchReservation.ticket_amount);
+          setChosenTicket(fetchReservation.ticket);
+          setChosenAmount(fetchReservation.ticket_amount);
           setTotalprice(fetchReservation.total_price);
         } catch (error) {
           console.error("Error fetching reservation: " + reservationId);
@@ -72,8 +72,8 @@ export default function ReservationForm() {
     setIsEditReservationClicked,
     setChosenShowId,
     setChosenCustomerId,
-    setTicket,
-    setAmount,
+    setChosenTicket,
+    setChosenAmount,
     setTotalprice,
   ]);
 
@@ -100,41 +100,37 @@ export default function ReservationForm() {
 
   useEffect(() => {
     handlePriceChange();
-  }, [ticket, amount, handlePriceChange]);
+  }, [chosenTicket, choseAmount, handlePriceChange]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   function handlePriceChange() {
     //Function works despite warning
     let price = 0;
-    if (amount != 0) {
+    if (choseAmount != 0 && chosenTicket != "") {
       for (let i = 0; i < prices.length; i++) {
-        if (prices[i].name === ticket) {
+        if (prices[i].name === chosenTicket) {
           price += prices[i].price;
         }
 
-        if (amount <= 5 && prices[i].name === "reservation_fee") {
+        if (choseAmount <= 5 && prices[i].name === "reservation_fee") {
           price += prices[i].price;
-        } else if (amount >= 10 && prices[i].name === "group_discount") {
+        } else if (choseAmount >= 10 && prices[i].name === "group_discount") {
           const discount = prices[i].percent;
           price -= (price * discount) / 100;
         }
-        for (const movie of moviesData) {
-          if (
-            movie.id ===
-              shows.find((show) => show.id === chosenShowId)?.movie.id &&
-            movie.is3D &&
-            prices[i].name === "3d_fee"
-          ) {
-            price = (price + prices[i].price) * amount;
-            break;
-          } else {
-            price *= amount;
-            break;
-          }
+        if (
+          prices[i].name === "3d_fee" &&
+          moviesData.find(
+            (movie) =>
+              movie.id ===
+              shows.find((show) => show.id === chosenShowId)?.movie.id
+          )?.threeD
+        ) {
+          price += prices[i].price;
         }
       }
+      price *= choseAmount;
     }
-
     setTotalprice(price);
   }
 
@@ -191,9 +187,9 @@ export default function ReservationForm() {
       [name]: value,
     }));
     if (name === "ticket") {
-      setTicket(value);
+      setChosenTicket(value);
     } else if (name === "ticket_amount") {
-      setAmount(parseInt(value));
+      setChosenAmount(parseInt(value));
     }
   };
 
