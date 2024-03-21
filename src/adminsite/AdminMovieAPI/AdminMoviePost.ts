@@ -1,24 +1,15 @@
-const enpoint = "http://localhost:8800/";
+// const endpoint = "http://localhost:8080";
 
-interface Movie {
-  id: number;
-  title: string;
-  duration: number;
-  is3D: boolean;
-  isActive: boolean;
-}
+import { Movie } from "../MoviesData";
 
-export default function MoviePutRoute(
-  movieId: number,
-  updatedMovie: Movie
-): Promise<Movie> {
-  console.log("put-route-data", movieId, updatedMovie);
-  return fetch(enpoint + `${movieId}`, {
-    method: "PUT",
+export default function MoviePostRoute(createdMovie: Movie): Promise<Movie> {
+  console.log("post-route-data", createdMovie);
+  return fetch(`http://localhost:8080/movies`, {
+    method: "POST",
     headers: {
       "content-type": "application/json",
     },
-    body: JSON.stringify(updatedMovie),
+    body: JSON.stringify(createdMovie),
   }).then((response) => {
     if (!response.ok) {
       throw new Error("An error occured while updating the movie");
