@@ -2,12 +2,9 @@ const endpoint = "http://localhost:8080";
 
 import { Movie } from "../MoviesData";
 
-export default function MoviePutRoute(
-  movieId: number,
-  updatedMovie: Movie
-): Promise<Movie> {
+export default function MoviePutRoute(updatedMovie: Movie): Promise<Movie> {
   console.log("put-route-data", updatedMovie);
-  return fetch(`${endpoint}/movies/${movieId}`, {
+  return fetch(`${endpoint}/movies/${updatedMovie.id}`, {
     method: "PUT",
     headers: {
       "content-type": "application/json",
