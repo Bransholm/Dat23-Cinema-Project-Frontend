@@ -45,13 +45,13 @@ export default function MovieFilter() {
   const filterMovies = () => {
     let filtered = moviesList.slice();
 
+    // Filter options for the movie-table
     filtered = filtered.filter((movie) => {
       let passDurationFilter = true;
       let passActiveFilter = true;
       let pass3dFilter = true;
       let passSearchFilter = true;
 
-      // Her bliver film-listen sorteret på baggrund af alle filtrene
       if (durationFilter === "120+") {
         passDurationFilter = movie.duration >= 120;
       } else if (durationFilter === "below 120") {
@@ -84,7 +84,7 @@ export default function MovieFilter() {
       );
     });
 
-    // Her bliver film-listen sorteret på baggrund af sortOption
+    // Sorts options for the movie-table
     if (sortOption === "title-ascending") {
       filtered.sort((a, b) => a.title.localeCompare(b.title));
     } else if (sortOption === "title-descending") {
@@ -98,6 +98,7 @@ export default function MovieFilter() {
     setFilteredMovies([...filtered]);
   };
 
+  // This section handles the filter and sort onClick-events 
   const handleDurationFilterChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
