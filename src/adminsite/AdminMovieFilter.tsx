@@ -69,6 +69,9 @@ export default function MovieFilter() {
         passActiveFilter = !movie.active;
       }
 
+
+
+
       if (is3dFilter === "3D") {
         pass3dFilter = movie.threeD;
       } else if (is3dFilter === "2D") {
@@ -76,17 +79,10 @@ export default function MovieFilter() {
       }
 
       if (searchQuery) {
-        passSearchFilter = movie.title
-          .toLowerCase()
-          .includes(searchQuery.toLocaleLowerCase());
+        passSearchFilter = movie.title.toLowerCase().includes(searchQuery.toLocaleLowerCase());
       }
 
-      return (
-        passDurationFilter &&
-        passActiveFilter &&
-        pass3dFilter &&
-        passSearchFilter
-      );
+      return passDurationFilter && passActiveFilter && pass3dFilter && passSearchFilter;
     });
 
     // Her bliver film-listen sorteret på baggrund af sortOption
@@ -135,7 +131,7 @@ export default function MovieFilter() {
     <>
       <div>
         <label>
-          Søg efter titel
+          Søg efter titel:
           <input
             type="text"
             value={searchQuery}
