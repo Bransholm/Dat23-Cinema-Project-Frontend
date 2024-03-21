@@ -146,6 +146,7 @@ export default function MovieFilter() {
         // moviesList={moviesList}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        setFilteredMovies={setFilteredMovies}
       />
     </>
   );
