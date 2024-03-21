@@ -107,28 +107,28 @@ export default function ReservationForm() {
     //Function works despite warning
     let price = 0;
     if (choseAmount != 0 && chosenTicket != "") {
-      for (let i = 0; i < prices.length; i++) {
-        if (prices[i].name === chosenTicket) {
-          price += prices[i].price;
-        }
-
-        if (choseAmount <= 5 && prices[i].name === "reservation_fee") {
-          price += prices[i].price;
-        } else if (choseAmount >= 10 && prices[i].name === "group_discount") {
-          const discount = prices[i].percent;
-          price -= (price * discount) / 100;
-        }
-        if (
-          prices[i].name === "3d_fee" &&
-          moviesData.find(
-            (movie) =>
-              movie.id ===
-              shows.find((show) => show.id === chosenShowId)?.movie.id
-          )?.threeD
-        ) {
-          price += prices[i].price;
-        }
+      // for (let i = 0; i < prices.length; i++) {
+      if (prices[i].name === chosenTicket) {
+        price += prices[i].price;
       }
+
+      if (choseAmount <= 5 && prices[i].name === "reservation_fee") {
+        price += prices[i].price;
+      } else if (choseAmount >= 10 && prices[i].name === "group_discount") {
+        const discount = prices[i].percent;
+        price -= (price * discount) / 100;
+      }
+      if (
+        prices[i].name === "3d_fee" &&
+        moviesData.find(
+          (movie) =>
+            movie.id ===
+            shows.find((show) => show.id === chosenShowId)?.movie.id
+        )?.threeD
+      ) {
+        price += prices[i].price;
+      }
+      // }
       price *= choseAmount;
     }
     setTotalprice(price);
