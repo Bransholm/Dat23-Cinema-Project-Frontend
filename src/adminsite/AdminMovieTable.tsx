@@ -46,6 +46,16 @@ export default function UserTable({
     }
   };
 
+  const resetForm = () => {
+    setUpdatedTitle("");
+    setUpdatedDescription("");
+    setUpdatedActors("");
+    setUpdatedDuration(0);
+    setUpdatedGenre("");
+    setUpdatedIs3D(false);
+    setUpdatedIsActive(false);
+  };
+
   const handleCloseDialog = () => {
     setEditMovie(null);
   };
@@ -67,6 +77,7 @@ export default function UserTable({
         .then((updateMovieFromServer) => {
           onEdit(editMovie.id!, updateMovieFromServer);
           setEditMovie(null);
+          resetForm();
 
           getMovies()
             .then((movies) => {
@@ -93,19 +104,19 @@ export default function UserTable({
       MoviePostRoute(newMovie)
         .then((createdMovieFromServer) => {
           console.log(createdMovieFromServer);
-
           getMovies()
-            .then((movies) => {
-              setFilteredMovies(movies);
-            })
-            .catch((error) => {
-              console.error("Error fetching movies ", error);
-            });
+          .then((movies) => {
+            setFilteredMovies(movies);
+          })
+          .catch((error) => {
+            console.error("Error fetching movies ", error);
+          });
         })
         .catch((error) => {
           console.error("Error creating a new movie: - ", error);
         });
-    }
+      }
+      resetForm();
   };
 
   return (
