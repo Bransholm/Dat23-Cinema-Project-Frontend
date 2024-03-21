@@ -9,14 +9,12 @@ import getMovies from "./AdminMovieAPI/AdminMovieRead.ts";
 interface MovieTableProps {
   moviesList: Movie[];
   onEdit: (id: number, updatedMovie: Movie) => void;
-  onDelete: (id: number) => void;
   setFilteredMovies: React.Dispatch<React.SetStateAction<Movie[]>>;
 }
 
 export default function UserTable({
   moviesList,
   onEdit,
-  onDelete,
   setFilteredMovies,
 }: MovieTableProps) {
   // Stores the movie chosen to be updated
@@ -124,7 +122,6 @@ export default function UserTable({
       <table>
         <thead>
           <tr>
-            <th>Id</th>
             <th>Title</th>
             <th>Description</th>
             <th>Actors</th>
@@ -149,7 +146,6 @@ export default function UserTable({
                 <button onClick={() => handleEditClick(movie.id ?? 0)}>
                   Opdater
                 </button>
-                <button onClick={() => onDelete(movie.id ?? 0)}>Slet</button>
               </td>
             </tr>
           ))}
