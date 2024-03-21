@@ -4,24 +4,24 @@ import { API_URL } from "../settings";
 const MOVIE_URL = API_URL + "/movies";
 
 interface movie {
-  id: number ;
+  id: number;
   title: string;
   description: string;
   actors: string;
   duration: number;
   genre: string;
-  is3D: boolean;
+  threeD: boolean;
   isActive: boolean;
 }
 
 async function getMovies(): Promise<Array<movie>> {
-    console.log("fetchMovies");
-    
+  console.log("fetchMovies");
+
   return fetch(MOVIE_URL).then(handleHttpErrors);
 }
 
 // test that i get all the movies
-getMovies().then(res => console.log(res))
+getMovies().then((res) => console.log(res));
 
 async function getMovie(id: number): Promise<movie> {
   return fetch(MOVIE_URL + "/" + id).then(handleHttpErrors);
