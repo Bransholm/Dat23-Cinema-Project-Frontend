@@ -108,6 +108,14 @@ async function getPrices() {
   ];
 }
 
+function getCinemas() {
+  return [{ id: 1, city: "123 Example St, Cityville", name: "Cinema City" }];
+}
+
+function getTheatres() {
+  return [{ id: 1, name: "Theatre 1" }];
+}
+
 export type { Reservation, Customer, Show, Price, Cinema };
 // eslint-disable-next-line react-refresh/only-export-components
 export {
@@ -117,4 +125,6 @@ export {
   getCustomers,
   getRerservations,
   getReservation,
+  getCinemas,
+  getTheatres,
 };
