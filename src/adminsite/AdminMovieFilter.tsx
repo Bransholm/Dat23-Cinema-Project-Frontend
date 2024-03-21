@@ -42,7 +42,6 @@ export default function MovieFilter() {
     setFilteredMovies(updatedMovieList);
   };
 
-
   const filterMovies = () => {
     let filtered = moviesList.slice();
 
@@ -65,9 +64,6 @@ export default function MovieFilter() {
         passActiveFilter = !movie.active;
       }
 
-
-
-
       if (is3dFilter === "3D") {
         pass3dFilter = movie.threeD;
       } else if (is3dFilter === "2D") {
@@ -75,10 +71,17 @@ export default function MovieFilter() {
       }
 
       if (searchQuery) {
-        passSearchFilter = movie.title.toLowerCase().includes(searchQuery.toLocaleLowerCase());
+        passSearchFilter = movie.title
+          .toLowerCase()
+          .includes(searchQuery.toLocaleLowerCase());
       }
 
-      return passDurationFilter && passActiveFilter && pass3dFilter && passSearchFilter;
+      return (
+        passDurationFilter &&
+        passActiveFilter &&
+        pass3dFilter &&
+        passSearchFilter
+      );
     });
 
     // Her bliver film-listen sorteret på baggrund af sortOption
@@ -146,14 +149,6 @@ export default function MovieFilter() {
       </div>
       <div>
         <label>
-          Filter by Active Status:
-          <select value={isActiveFilter} onChange={handleIsActiveFilterChange}>
-            <option value="">ALL</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-        </label>
-        <label>
           Filtre efter Dimensioner:
           <select value={is3dFilter} onChange={handle3dFilterChange}>
             <option value="">Alle</option>
@@ -161,6 +156,16 @@ export default function MovieFilter() {
             <option value="2D">2D</option>
           </select>
         </label>
+
+        <label>
+          Filter by Active Status:
+          <select value={isActiveFilter} onChange={handleIsActiveFilterChange}>
+            <option value="">Alle</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </label>
+
         <label>
           Sorter efter:
           <select value={sortOption} onChange={handleSortByChange}>
