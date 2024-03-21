@@ -10,6 +10,8 @@ import {
   getReservation,
 } from "../services/ReservationApiFacade";
 import { useLocation } from "react-router-dom";
+import { getShows, movieData, show } from "../services/showAPI";
+import { movie } from "../services/movieAPItest";
 // import { theatre } from "../services/theatreAPItest";
 
 const EMPTY_RESERVATION = {

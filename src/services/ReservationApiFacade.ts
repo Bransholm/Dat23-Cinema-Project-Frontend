@@ -4,8 +4,8 @@ const RESERVATION_URL = API_URL + "/reservations";
 
 interface Reservation {
   id: number | null;
-  show_id: number | null;
-  customer_id: number | null;
+  show_id: number;
+  customer_id: number;
   total_price: number;
   time_stamp: Date | null;
   ticket: string;
@@ -102,6 +102,14 @@ function getTheatres() {
   return [{ id: 1, name: "Theatre 1" }];
 }
 
-export type { Reservation, Customer, Price };
+export type { Reservation, Customer, Price, Cinema };
 // eslint-disable-next-line react-refresh/only-export-components
-export { addReservation, getPrices, getCustomers };
+export {
+  addReservation,
+  getPrices,
+  getCustomers,
+  getRerservations,
+  getReservation,
+  getCinemas,
+  getTheatres,
+};
