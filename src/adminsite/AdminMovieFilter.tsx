@@ -98,7 +98,7 @@ export default function MovieFilter() {
     setFilteredMovies([...filtered]);
   };
 
-  // This section handles the filter and sort onClick-events 
+  // This section handles the filter and sort onClick-events
   const handleDurationFilterChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -142,7 +142,7 @@ export default function MovieFilter() {
         <label>
           Filtrer efter længde:
           <select value={durationFilter} onChange={handleDurationFilterChange}>
-            <option value="">ALL</option>
+            <option value="">Alle</option>
             <option value="120+">120 and above</option>
             <option value="below 120">below 120</option>
           </select>
