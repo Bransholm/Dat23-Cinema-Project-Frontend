@@ -7,7 +7,9 @@ import {
   getPrices,
   Customer,
   getCustomers,
+  getReservation,
 } from "../services/ReservationApiFacade";
+import { useLocation } from "react-router-dom";
 // import { theatre } from "../services/theatreAPItest";
 
 const EMPTY_RESERVATION = {
@@ -21,6 +23,11 @@ const EMPTY_RESERVATION = {
 };
 
 export default function ReservationForm() {
+  const { state } = useLocation();
+  const reservationId = state?.id;
+  const [isEditReservationClicked, setIsEditReservationClicked] = useState(
+    state?.isEditReservationClicked
+  );
   const [reservationFormData, setReservationFormData] =
     useState<Reservation>(EMPTY_RESERVATION);
   const [shows, setShows] = useState<show[]>([]);
@@ -35,6 +42,38 @@ export default function ReservationForm() {
   const [chosenCustomerId, setChosenCustomerId] = useState(0);
   const [showsDialogActive, setShowsDialogActive] = useState(false);
   const [customersDialogActive, setCustomersDialogActive] = useState(false);
+
+  useEffect(() => {
+    if (isEditReservationClicked && !reservationFormData.id) {
+      const fetchReservation = async () => {
+        try {
+          const fetchReservation = await getReservation(reservationId);
+          setReservationFormData(fetchReservation);
+          setChosenShowId(fetchReservation.show_id);
+          setChosenCustomerId(fetchReservation.customer_id);
+          setTicket(fetchReservation.ticket);
+          setAmount(fetchReservation.ticket_amount);
+          setTotalprice(fetchReservation.total_price);
+        } catch (error) {
+          console.error("Error fetching reservation: " + reservationId);
+        }
+      };
+      fetchReservation();
+    }
+    setIsEditReservationClicked(false);
+    console.log(reservationFormData);
+  }, [
+    reservationId,
+    reservationFormData.id,
+    reservationFormData,
+    isEditReservationClicked,
+    setIsEditReservationClicked,
+    setChosenShowId,
+    setChosenCustomerId,
+    setTicket,
+    setAmount,
+    setTotalprice,
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,6 +109,7 @@ export default function ReservationForm() {
         if (prices[i].name === ticket) {
           price += prices[i].price;
         }
+
         if (amount <= 5 && prices[i].name === "reservation_fee") {
           price += prices[i].price;
         } else if (amount >= 10 && prices[i].name === "group_discount") {
@@ -92,6 +132,7 @@ export default function ReservationForm() {
         }
       }
     }
+
     setTotalprice(price);
   }
 
@@ -182,6 +223,7 @@ export default function ReservationForm() {
           id="cowboy_ticket"
           value="cowboy_ticket"
           onChange={handleReservationFormChange}
+          checked={reservationFormData.ticket === "cowboy_ticket"}
         />
         <label htmlFor="cowboy_ticket">Cowboy-billet</label>
         <input
@@ -190,6 +232,7 @@ export default function ReservationForm() {
           id="sofa_ticket"
           value="sofa_ticket"
           onChange={handleReservationFormChange}
+          checked={reservationFormData.ticket === "sofa_ticket"}
         />
         <label htmlFor="sofa_ticket">Sofa-billet</label>
         <input
@@ -198,6 +241,7 @@ export default function ReservationForm() {
           id="standard_ticket"
           value="standard_ticket"
           onChange={handleReservationFormChange}
+          checked={reservationFormData.ticket === "standard_ticket"}
         />
         <label htmlFor="standard_ticket">Standard-billet</label>
         {/* Amount */}
@@ -207,6 +251,7 @@ export default function ReservationForm() {
           name="ticket_amount"
           id="ticket_amount"
           onChange={handleReservationFormChange}
+          value={reservationFormData.ticket_amount}
         />
         <button id="choose-customer-btn" onClick={handleCustomersDialogClick}>
           Vælg kunde

@@ -1,0 +1,68 @@
+/* layout.css */
+.app-layout {
+  display: grid;
+  grid-template-columns: minmax(4cm, auto) 1fr minmax(4cm, auto); /* Adjust the width of the side margins here */
+  grid-template-rows: auto 1fr; /* Header takes its content size, rest is stretched */
+  min-height: 100vh;
+  min-width: 80vw;
+  background-color: #121212; /* Dark background color */
+  color: #ffffff; /* Light text color */
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.nav-header {
+  background-color: #1e1e1e; /* Darker header background color */
+  grid-column: 1 / -1; /* Span across all columns */
+  padding: 1rem;
+}
+
+.page-content {
+  grid-column: 2 / -2; /* Span across middle columns */
+  grid-row: 2; /* Start from second row */
+  padding: 2em;
+}
+
+/* Blue details */
+.nav-header {
+  border-bottom: 2px solid #2196f3; /* Blue border bottom for header */
+}
+
+/* layout.css */
+nav {
+  background-color: #1e1e1e; /* Darker background color for the nav */
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.custom-tab {
+  margin-right: 20px; /* Adjust spacing between tabs */
+}
+
+.custom-tab a {
+  text-decoration: none;
+  color: #ffffff; /* Tab text color */
+  padding: 10px;
+  border-bottom: 2px solid transparent; /* Bottom border for tab */
+  transition: border-color 0.3s ease; /* Smooth transition for border color change */
+}
+
+/* Styling for active tab */
+.custom-tab a.active {
+  border-color: #2196f3; /* Blue border color for active tab */
+  border-width: 4px;
+}
+
+/* Hover effect for tabs */
+.custom-tab a:hover {
+  border-color: #2196f3; /* Blue border color on hover */
+}
+
+li {
+  margin-right: 20px; /* Adjust spacing between tabs */
+}
