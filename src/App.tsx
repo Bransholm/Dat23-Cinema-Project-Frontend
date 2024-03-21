@@ -17,7 +17,6 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" />
         <Route path="/admin-movies" element={<AdminMovies />} />
-        <Route path="/customer-movies" element={<CustomerMovies />} />
         {/* her er noget fra larses kode som vi nok for brug for */}
         <Route path="/recipes">
           {/* <Route index element={<Recipes />} /> */}
