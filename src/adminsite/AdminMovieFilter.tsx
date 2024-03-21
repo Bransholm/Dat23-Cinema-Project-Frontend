@@ -4,8 +4,12 @@ import getMovies from "./AdminMovieAPI/AdminMovieRead";
 import { Movie } from "./MoviesData";
 
 export default function MovieFilter() {
+  // Stores the movielist fetched from the database
   const [moviesList, setMovieList] = useState<Movie[]>([]);
+  // Stores the filtered movielist shown to the user
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
+  // Stores the search value
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   // UseStates that stores the selected filtere and sort options
   const [durationFilter, setDurationFilter] = useState<string>("");
@@ -26,7 +30,7 @@ export default function MovieFilter() {
 
   useEffect(() => {
     filterMovies();
-  }, [durationFilter, isActiveFilter, is3dFilter, sortOption]);
+  }, [durationFilter, isActiveFilter, is3dFilter, sortOption, searchQuery]);
 
   const handleEdit = (id: number, updatedMovie: Movie) => {
     const updatedMovieList = filteredMovies.map((movie) => {
@@ -50,6 +54,7 @@ export default function MovieFilter() {
       let passDurationFilter = true;
       let passActiveFilter = true;
       let pass3dFilter = true;
+      let passSearchFilter = true;
 
       // Her bliver film-listen sorteret på baggrund af alle filtrene
       if (durationFilter === "120+") {
@@ -70,7 +75,18 @@ export default function MovieFilter() {
         pass3dFilter = !movie.threeD;
       }
 
-      return passDurationFilter && passActiveFilter && pass3dFilter;
+      if (searchQuery) {
+        passSearchFilter = movie.title
+          .toLowerCase()
+          .includes(searchQuery.toLocaleLowerCase());
+      }
+
+      return (
+        passDurationFilter &&
+        passActiveFilter &&
+        pass3dFilter &&
+        passSearchFilter
+      );
     });
 
     // Her bliver film-listen sorteret på baggrund af sortOption
@@ -109,9 +125,24 @@ export default function MovieFilter() {
     setSortOption(event.target.value);
   };
 
+  const handleSearchInutChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchQuery(event.target.value);
+  };
+
   return (
     <>
       <div>
+        <label>
+          Søg efter titel
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchInutChange}
+          />
+        </label>
+
         <label>
           Filtrer efter længde:
           <select value={durationFilter} onChange={handleDurationFilterChange}>
@@ -151,7 +182,6 @@ export default function MovieFilter() {
       </div>
       <UserTable
         moviesList={filteredMovies}
-        // moviesList={moviesList}
         onEdit={handleEdit}
         onDelete={handleDelete}
         setFilteredMovies={setFilteredMovies}
