@@ -4,8 +4,7 @@ import getMovies from "./AdminMovieAPI/AdminMovieRead";
 import { Movie } from "./MoviesData";
 
 export default function MovieFilter() {
-  // const [movieList, setMovieList] = useState<Movie[]>(MoviesList);
-  // const [fetchedMovies, setFetchedMovies] = useState<Movie[]>([]);
+  const [moviesList, setMovieList] = useState<Movie[]>([]);
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
 
   // UseStates that stores the selected filtere and sort options
@@ -17,6 +16,7 @@ export default function MovieFilter() {
   useEffect(() => {
     getMovies()
       .then((movies) => {
+        setMovieList(movies);
         setFilteredMovies(movies);
       })
       .catch((error) => {
@@ -28,7 +28,7 @@ export default function MovieFilter() {
     filterMovies();
   }, [durationFilter, isActiveFilter, is3dFilter, sortOption]);
 
-  const handleEdit = (id, updatedMovie) => {
+  const handleEdit = (id: number, updatedMovie: Movie) => {
     const updatedMovieList = filteredMovies.map((movie) => {
       if (movie.id === id) {
         return updatedMovie;
@@ -38,32 +38,40 @@ export default function MovieFilter() {
     setFilteredMovies(updatedMovieList);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: number) => {
     const updatedMovieList = filteredMovies.filter((movie) => movie.id !== id);
     setFilteredMovies(updatedMovieList);
   };
 
   const filterMovies = () => {
-    let filtered = filteredMovies.slice();
+    let filtered = moviesList.slice();
 
-    // Her bliver film-listen sorteret på baggrund af alle filtrene
-    if (durationFilter === "120+") {
-      filtered = filtered.filter((movie) => movie.duration >= 120);
-    } else if (durationFilter === "below 120") {
-      filtered = filtered.filter((movie) => movie.duration < 120);
-    }
+    filtered = filtered.filter((movie) => {
+      let passDurationFilter = true;
+      let passActiveFilter = true;
+      let pass3dFilter = true;
 
-    if (isActiveFilter === "active") {
-      filtered = filtered.filter((movie) => movie.active);
-    } else if (isActiveFilter === "inactive") {
-      filtered = filtered.filter((movie) => !movie.active);
-    }
+      // Her bliver film-listen sorteret på baggrund af alle filtrene
+      if (durationFilter === "120+") {
+        passDurationFilter = movie.duration >= 120;
+      } else if (durationFilter === "below 120") {
+        passDurationFilter = movie.duration < 120;
+      }
 
-    if (is3dFilter === "3D") {
-      filtered = filtered.filter((movie) => movie.is3D);
-    } else if (is3dFilter === "2D") {
-      filtered = filtered.filter((movie) => !movie.is3D);
-    }
+      if (isActiveFilter === "active") {
+        passActiveFilter = movie.active;
+      } else if (isActiveFilter === "inactive") {
+        passActiveFilter = !movie.active;
+      }
+
+      if (is3dFilter === "3D") {
+        pass3dFilter = movie.threeD;
+      } else if (is3dFilter === "2D") {
+        pass3dFilter = !movie.threeD;
+      }
+
+      return passDurationFilter && passActiveFilter && pass3dFilter;
+    });
 
     // Her bliver film-listen sorteret på baggrund af sortOption
     if (sortOption === "title-ascending") {
