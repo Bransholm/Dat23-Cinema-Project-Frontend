@@ -42,10 +42,6 @@ export default function MovieFilter() {
     setFilteredMovies(updatedMovieList);
   };
 
-  const handleDelete = (id: number) => {
-    const updatedMovieList = filteredMovies.filter((movie) => movie.id !== id);
-    setFilteredMovies(updatedMovieList);
-  };
 
   const filterMovies = () => {
     let filtered = moviesList.slice();
@@ -179,7 +175,6 @@ export default function MovieFilter() {
       <UserTable
         moviesList={filteredMovies}
         onEdit={handleEdit}
-        onDelete={handleDelete}
         setFilteredMovies={setFilteredMovies}
       />
     </>
