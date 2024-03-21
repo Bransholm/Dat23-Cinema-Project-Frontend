@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getShow, addShow, show as showInterface } from "../services/showAPI";
-import { getMovies, movie as movieInterface } from "../services/movieAPItest";
-import { getTheatres, theatre as theatreInterface } from "../services/theatreAPItest";
+import { getMovies, movie as movieInterface } from "../services/movieApi";
+import {
+  getTheatres,
+  theatre as theatreInterface,
+} from "../services/theatreApiFacade";
 import { formatDateForBackend } from "../utils/dateUtils";
 
 export default function ShowFormEdit() {
@@ -53,7 +56,9 @@ export default function ShowFormEdit() {
 
   // updaye the theatre id in the show object by selecting a theatre from the dropdown by theatre.name and theatre.id
   const handleTheatreChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const theatre = theatres.find((theatre) => theatre.id === Number(e.target.value));
+    const theatre = theatres.find(
+      (theatre) => theatre.id === Number(e.target.value)
+    );
     setShow({ ...show, theatre: theatre ? theatre : show.theatre });
   };
 
@@ -72,7 +77,13 @@ export default function ShowFormEdit() {
     console.log("formattedDate", formattedDate);
 
     // Update the show object in the database by submitting show.id, movie.id, theatre.id, date, and updatedStartTime to the server
-    const updatedShow = { id, movie: { id: movie.id }, theatre: { id: theatre.id }, date: formattedDate, startTime };
+    const updatedShow = {
+      id,
+      movie: { id: movie.id },
+      theatre: { id: theatre.id },
+      date: formattedDate,
+      startTime,
+    };
     console.log("updatedShow", updatedShow);
 
     addShow(updatedShow as showInterface)
@@ -89,7 +100,11 @@ export default function ShowFormEdit() {
       <h2>Edit Show</h2>
       <div>
         <label htmlFor="theatre">Theatre</label>
-        <select name="theatre" value={show.theatre.id} onChange={handleTheatreChange}>
+        <select
+          name="theatre"
+          value={show.theatre.id}
+          onChange={handleTheatreChange}
+        >
           {theatres.map((theatre) => (
             <option key={theatre.id} value={theatre.id}>
               {theatre.name}
@@ -113,11 +128,21 @@ export default function ShowFormEdit() {
       </div> */}
       <div>
         <label htmlFor="date">Date</label>
-        <input type="date" name="date" value={chosenDate} onChange={handleDateChange} />
+        <input
+          type="date"
+          name="date"
+          value={chosenDate}
+          onChange={handleDateChange}
+        />
       </div>
       <div>
         <label htmlFor="startTime">Start Time</label>
-        <input type="time" name="startTime" value={show.startTime} onChange={handleChange} />
+        <input
+          type="time"
+          name="startTime"
+          value={show.startTime}
+          onChange={handleChange}
+        />
       </div>
       <button type="submit">Save</button>
     </form>

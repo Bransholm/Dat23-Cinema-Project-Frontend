@@ -3,15 +3,20 @@ import { useEffect, useState } from "react";
 import {
   Reservation,
   addReservation,
-  Price,
-  getPrices,
-  Customer,
   getCustomers,
   getReservation,
 } from "../services/ReservationApiFacade";
 import { useLocation } from "react-router-dom";
-import { getShows, movieData, show } from "../services/showAPI";
-import { movie } from "../services/movieAPItest";
+import {
+  ShowInterfaceTheatre,
+  getShows,
+  movieData,
+  show,
+  showInterface,
+} from "../services/showAPI";
+import { movie } from "../services/movieApi";
+import { Customer } from "../services/customerApiFacade";
+import { Prices, getPrices } from "../services/pricesApiFacade";
 // import { theatre } from "../services/theatreAPItest";
 
 const EMPTY_RESERVATION = {
@@ -32,11 +37,13 @@ export default function ReservationForm() {
   );
   const [reservationFormData, setReservationFormData] =
     useState<Reservation>(EMPTY_RESERVATION);
-  const [shows, setShows] = useState<show[]>([]);
+  const [shows, setShows] = useState<
+    (show | showInterface | ShowInterfaceTheatre)[]
+  >([]);
   const [moviesData, setMoviesData] = useState<movie[]>([]);
   // const [theatresData, setTheatreData] = useState<theatre[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
-  const [prices, setPrices] = useState<Price[]>([]);
+  const [prices, setPrices] = useState<Prices[]>([]);
   const [totalPrice, setTotalprice] = useState(0);
   const [choseAmount, setChosenAmount] = useState(0);
   const [chosenTicket, setChosenTicket] = useState("");
@@ -81,12 +88,12 @@ export default function ReservationForm() {
     const fetchData = async () => {
       try {
         const showsResponse = await getShows();
-        const ticketsResponse = await getPrices();
+        const pricesResponse = await getPrices();
         const customersResponse = await getCustomers();
         const movies = await movieData();
         // const theatres = await theatreData();
         setShows(showsResponse);
-        setPrices(ticketsResponse);
+        setPrices(pricesResponse);
         setCustomers(customersResponse);
         setMoviesData(movies);
         // setTheatreData(theatres);

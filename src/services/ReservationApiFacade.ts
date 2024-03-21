@@ -11,25 +11,6 @@ interface Reservation {
   ticket: string;
   ticket_amount: number;
 }
-interface Customer {
-  id: number | null;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone_number: string;
-}
-
-interface Price {
-  id: number | null;
-  name: string;
-  price: number;
-  percent: number;
-}
-interface Cinema {
-  id: number | null;
-  city: string;
-  name: string;
-}
 
 async function getRerservations(): Promise<Array<Reservation>> {
   return fetch(RESERVATION_URL).then(handleHttpErrors);
@@ -102,7 +83,7 @@ function getTheatres() {
   return [{ id: 1, name: "Theatre 1" }];
 }
 
-export type { Reservation, Customer, Price, Cinema };
+export type { Reservation };
 // eslint-disable-next-line react-refresh/only-export-components
 export {
   addReservation,
