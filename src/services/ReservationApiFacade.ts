@@ -4,8 +4,8 @@ const RESERVATION_URL = API_URL + "/reservations";
 
 interface Reservation {
   id: number | null;
-  show_id: number | null;
-  customer_id: number | null;
+  show_id: number;
+  customer_id: number;
   total_price: number;
   time_stamp: Date | null;
   ticket: string;
@@ -18,18 +18,25 @@ interface Customer {
   email: string;
   phone_number: string;
 }
-interface Show {
-  id: number | null;
-  theatre: string;
-  movie: string;
-  date: string;
-  start_time: string;
-}
+
 interface Price {
   id: number | null;
   name: string;
   price: number;
   percent: number;
+}
+interface Cinema {
+  id: number | null;
+  city: string;
+  name: string;
+}
+
+async function getRerservations(): Promise<Array<Reservation>> {
+  return fetch(RESERVATION_URL).then(handleHttpErrors);
+}
+
+async function getReservation(id: number): Promise<Reservation> {
+  return fetch(RESERVATION_URL + "/" + id).then(handleHttpErrors);
 }
 
 async function addReservation(
@@ -41,15 +48,6 @@ async function addReservation(
     ? `${RESERVATION_URL}/${newReservation.id}`
     : RESERVATION_URL;
   return fetch(URL, options).then(handleHttpErrors);
-}
-
-async function getShows() {
-  return [
-    { id: 1, theatre: "th1", movie: "mv1", date: "date1", start_time: "time1" },
-    { id: 2, theatre: "th2", movie: "mv2", date: "date2", start_time: "time2" },
-    { id: 3, theatre: "th3", movie: "mv3", date: "date3", start_time: "time3" },
-    { id: 4, theatre: "th4", movie: "mv4", date: "date4", start_time: "time4" },
-  ];
 }
 
 async function getCustomers() {
@@ -92,9 +90,26 @@ async function getPrices() {
     { id: 3, name: "sofa_ticket", price: 120, percent: 0 },
     { id: 4, name: "group_discount", price: 0, percent: 7 },
     { id: 5, name: "reservation_fee", price: 30, percent: 0 },
+    { id: 6, name: "3d_fee", price: 40, percent: 0 },
   ];
 }
 
-export type { Reservation, Customer, Show, Price };
+function getCinemas() {
+  return [{ id: 1, city: "123 Example St, Cityville", name: "Cinema City" }];
+}
+
+function getTheatres() {
+  return [{ id: 1, name: "Theatre 1" }];
+}
+
+export type { Reservation, Customer, Price, Cinema };
 // eslint-disable-next-line react-refresh/only-export-components
-export { addReservation, getShows, getPrices, getCustomers };
+export {
+  addReservation,
+  getPrices,
+  getCustomers,
+  getRerservations,
+  getReservation,
+  getCinemas,
+  getTheatres,
+};

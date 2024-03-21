@@ -1,20 +1,19 @@
 import "./ReservationForm.css";
 import { useEffect, useState } from "react";
 import {
-  Show,
   Reservation,
-  getShows,
   addReservation,
   Price,
   getPrices,
   Customer,
   getCustomers,
 } from "../services/ReservationApiFacade";
+// import { theatre } from "../services/theatreAPItest";
 
 const EMPTY_RESERVATION = {
   id: null,
-  show_id: null,
-  customer_id: null,
+  show_id: 0,
+  customer_id: 0,
   total_price: 0,
   time_stamp: null,
   ticket: "",
@@ -24,7 +23,9 @@ const EMPTY_RESERVATION = {
 export default function ReservationForm() {
   const [reservationFormData, setReservationFormData] =
     useState<Reservation>(EMPTY_RESERVATION);
-  const [shows, setShows] = useState<Show[]>([]);
+  const [shows, setShows] = useState<show[]>([]);
+  const [moviesData, setMoviesData] = useState<movie[]>([]);
+  // const [theatresData, setTheatreData] = useState<theatre[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [prices, setPrices] = useState<Price[]>([]);
   const [totalPrice, setTotalprice] = useState(0);
@@ -41,9 +42,13 @@ export default function ReservationForm() {
         const showsResponse = await getShows();
         const ticketsResponse = await getPrices();
         const customersResponse = await getCustomers();
+        const movies = await movieData();
+        // const theatres = await theatreData();
         setShows(showsResponse);
         setPrices(ticketsResponse);
         setCustomers(customersResponse);
+        setMoviesData(movies);
+        // setTheatreData(theatres);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -71,8 +76,21 @@ export default function ReservationForm() {
           const discount = prices[i].percent;
           price -= (price * discount) / 100;
         }
+        for (const movie of moviesData) {
+          if (
+            movie.id ===
+              shows.find((show) => show.id === chosenShowId)?.movie.id &&
+            movie.is3D &&
+            prices[i].name === "3d_fee"
+          ) {
+            price = (price + prices[i].price) * amount;
+            break;
+          } else {
+            price *= amount;
+            break;
+          }
+        }
       }
-      price *= amount;
     }
     setTotalprice(price);
   }
@@ -83,7 +101,7 @@ export default function ReservationForm() {
         key={`show-${show.id}`}
         onClick={() => handleShowChange(show.id || 0)}
       >
-        {show.movie} - {show.date}
+        {} - {show.date}
       </button>
     ));
   };
