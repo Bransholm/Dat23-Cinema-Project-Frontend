@@ -1,11 +1,11 @@
 import { API_URL } from "../settings";
 import { handleHttpErrors, makeOptions } from "./fetchUtils";
-import { getMovies, movie, movie as movieInterface } from "./movieAPItest";
+import { getMovies, movie, movie as movieInterface } from "./movieApi";
 import {
   getTheatres,
   theatre,
   theatre as theatreInterface,
-} from "./theatreAPItest";
+} from "./theatreApiFacade";
 
 const SHOWS_URL = API_URL + "/shows";
 

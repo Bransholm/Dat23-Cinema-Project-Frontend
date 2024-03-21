@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { addShow,  show as showInterface} from "../services/showAPI";
-import { getMovies, movie as movieInterface } from "../services/movieAPItest";
+import { addShow, show as showInterface } from "../services/showAPI";
+import { getMovies, movie as movieInterface } from "../services/movieApi";
 import {
   getTheatres,
   theatre as theatreInterface,
-} from "../services/theatreAPItest";
+} from "../services/theatreApiFacade";
 import { formatDateForBackend, formatTimeForBackend } from "../utils/dateUtils"; // Import a utility function to format the date
 
 const EMPTY_SHOW = {

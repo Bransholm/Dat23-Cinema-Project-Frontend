@@ -1,17 +1,17 @@
 import { API_URL } from "../settings";
 import { handleHttpErrors } from "./fetchUtils";
-
+import { Cinema } from "./cinemaApiFacade";
 const THEATRES_URL = API_URL + "/theatres";
 
 interface theatre {
   id: number;
+  cinema: Cinema;
   name: string;
 }
 
 async function getTheatres(): Promise<Array<theatre>> {
   console.log("fetchTheatres");
-  // return fetch(THEATRES_URL).then(handleHttpErrors);
-  return [{ id: 1, name: "Theatre 1" }];
+  return fetch(THEATRES_URL).then(handleHttpErrors);
 }
 
 async function getTheatre(id: number): Promise<theatre> {
