@@ -207,7 +207,24 @@ export default function ReservationForm() {
 
   return (
     <>
-      <h2>Reservations</h2>
+      <h2>
+        Reservation til{" "}
+        {
+          moviesData.find(
+            (movie) =>
+              movie.id ===
+              shows.find((show) => show.id === chosenShowId)?.movie.id
+          )?.title
+        }
+        {" - "}
+        {moviesData.find(
+          (movie) =>
+            movie.id ===
+            shows.find((show) => show.id === chosenShowId)?.movie.id
+        )?.threeD ? (
+          <span>3D</span>
+        ) : null}
+      </h2>
       <form id="reservationForm">
         <button id="choose-show-btn" onClick={handleShowsDialogClick}>
           Vælg Show
