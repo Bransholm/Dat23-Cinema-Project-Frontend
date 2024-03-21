@@ -5,6 +5,8 @@ import Layout from "./Layout";
 import ShowList from "./shows/ShowList";
 import Show from "./shows/Show";
 import ShowFormCreate from "./shows/ShowFormCreate";
+import ShowFormEdit from "./shows/ShowFormEdit";
+// import ShowFormUpdate from "./shows/ShowFormUpdate";
 
 
 
@@ -18,6 +20,7 @@ function App() {
         <Route path="/shows/:id" element={<Show />} />
         <Route path="/login" element={<Login />} />
         <Route path="/shows/create" element={<ShowFormCreate />} />
+        <Route path="/shows/edit/:id" element={<ShowFormEdit />} />
       </Routes>
     </Layout>
   );

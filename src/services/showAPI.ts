@@ -39,7 +39,7 @@ interface ShowInterfaceTheatre {
   };
   movie: {
     id: number;
-    title: string;
+    title: string | undefined;
     duration: number;
   };
   date: string;
