@@ -24,8 +24,11 @@ export default function NavHeader() {
         <li className="custom-tab">
           <NavLink to="/shows">Shows</NavLink>
         </li>
-        <li>
+        <li className="custom-tab">
           <NavLink to="/shows/create">Create Show</NavLink>
+        </li>
+        <li className="custom-tab">
+          <NavLink to="/admin-movies"> Admin Film Oversigt </NavLink>
         </li>
         {/* <AuthStatus /> */}
       </ul>

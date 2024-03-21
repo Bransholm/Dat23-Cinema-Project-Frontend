@@ -1,4 +1,4 @@
-//@ts-nocheck
+
 
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ export default function Show() {
 
   useEffect(() => {
     getShow(Number(id))
-      .then((res) => setShow(res))
+      .then((res) => setShow(res as showInterface))
       .catch(() => setError("Show not fetched"));
   }, [id]);
 

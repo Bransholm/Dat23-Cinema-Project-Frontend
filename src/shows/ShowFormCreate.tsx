@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { addShow, show as showInterface } from "../services/showAPI";
+import { addShow,  show as showInterface} from "../services/showAPI";
 import { getMovies, movie as movieInterface } from "../services/movieAPItest";
 import {
   getTheatres,
