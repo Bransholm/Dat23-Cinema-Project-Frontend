@@ -10,13 +10,12 @@ import { useLocation } from "react-router-dom";
 import {
   ShowInterfaceTheatre,
   getShows,
-  movieData,
   show,
   showInterface,
 } from "../services/showAPI";
-import { movie } from "../services/movieApi";
+import { getMovies, Movie } from "../services/movieApi";
 import { Customer } from "../services/customerApiFacade";
-import { Prices, getPrices } from "../services/pricesApiFacade";
+import { Price, getPrices } from "../services/pricesApiFacade";
 // import { theatre } from "../services/theatreAPItest";
 
 const EMPTY_RESERVATION = {
@@ -40,12 +39,12 @@ export default function ReservationForm() {
   const [shows, setShows] = useState<
     (show | showInterface | ShowInterfaceTheatre)[]
   >([]);
-  const [moviesData, setMoviesData] = useState<movie[]>([]);
+  const [moviesData, setMoviesData] = useState<Movie[]>([]);
   // const [theatresData, setTheatreData] = useState<theatre[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
-  const [prices, setPrices] = useState<Prices[]>([]);
+  const [prices, setPrices] = useState<Price>();
   const [totalPrice, setTotalprice] = useState(0);
-  const [choseAmount, setChosenAmount] = useState(0);
+  const [chosenAmount, setChosenAmount] = useState(0);
   const [chosenTicket, setChosenTicket] = useState("");
   const [chosenShowId, setChosenShowId] = useState(0);
   const [chosenCustomerId, setChosenCustomerId] = useState(0);
@@ -90,12 +89,13 @@ export default function ReservationForm() {
         const showsResponse = await getShows();
         const pricesResponse = await getPrices();
         const customersResponse = await getCustomers();
-        const movies = await movieData();
+        const moviesResponse = await getMovies();
+        console.log("movies response: " + moviesResponse);
         // const theatres = await theatreData();
         setShows(showsResponse);
         setPrices(pricesResponse);
         setCustomers(customersResponse);
-        setMoviesData(movies);
+        setMoviesData(moviesResponse);
         // setTheatreData(theatres);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -107,36 +107,37 @@ export default function ReservationForm() {
 
   useEffect(() => {
     handlePriceChange();
-  }, [chosenTicket, choseAmount, handlePriceChange]);
+  }, [chosenTicket, chosenAmount, handlePriceChange]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   function handlePriceChange() {
     //Function works despite warning
     let price = 0;
-    if (choseAmount != 0 && chosenTicket != "") {
-      // for (let i = 0; i < prices.length; i++) {
-      if (prices[i].name === chosenTicket) {
-        price += prices[i].price;
-      }
 
-      if (choseAmount <= 5 && prices[i].name === "reservation_fee") {
-        price += prices[i].price;
-      } else if (choseAmount >= 10 && prices[i].name === "group_discount") {
-        const discount = prices[i].percent;
-        price -= (price * discount) / 100;
+    if (prices && chosenAmount != 0 && chosenTicket != "") {
+      const priceKeys = Object.keys(prices);
+
+      for (const key of priceKeys) {
+        const priceValue = prices[key];
+
+        if (priceValue != null) {
+          if (
+            key === chosenTicket ||
+            (key === "fee_expedition" && chosenAmount <= 5) ||
+            (key === "fee_3d" &&
+              moviesData.find(
+                (movie) =>
+                  movie.id ===
+                  shows.find((show) => show.id === chosenShowId)?.movie.id
+              )?.threeD)
+          ) {
+            price += priceValue;
+          } else if (key === "discount_group" && chosenAmount >= 10) {
+            price -= (price * priceValue) / 100;
+          }
+        }
       }
-      if (
-        prices[i].name === "3d_fee" &&
-        moviesData.find(
-          (movie) =>
-            movie.id ===
-            shows.find((show) => show.id === chosenShowId)?.movie.id
-        )?.threeD
-      ) {
-        price += prices[i].price;
-      }
-      // }
-      price *= choseAmount;
+      price *= chosenAmount;
     }
     setTotalprice(price);
   }
@@ -147,7 +148,7 @@ export default function ReservationForm() {
         key={`show-${show.id}`}
         onClick={() => handleShowChange(show.id || 0)}
       >
-        {} - {show.date}
+        {show.movie.title} - {show.date}
       </button>
     ));
   };
@@ -242,28 +243,28 @@ export default function ReservationForm() {
         <input
           type="radio"
           name="ticket"
-          id="cowboy_ticket"
-          value="cowboy_ticket"
+          id="ticket_medium"
+          value="ticket_medium"
           onChange={handleReservationFormChange}
-          checked={reservationFormData.ticket === "cowboy_ticket"}
+          checked={reservationFormData.ticket === "ticket_medium"}
         />
         <label htmlFor="cowboy_ticket">Cowboy-billet</label>
         <input
           type="radio"
           name="ticket"
-          id="sofa_ticket"
-          value="sofa_ticket"
+          id="ticket_expensive"
+          value="ticket_expensive"
           onChange={handleReservationFormChange}
-          checked={reservationFormData.ticket === "sofa_ticket"}
+          checked={reservationFormData.ticket === "ticket_expensive"}
         />
         <label htmlFor="sofa_ticket">Sofa-billet</label>
         <input
           type="radio"
           name="ticket"
-          id="standard_ticket"
-          value="standard_ticket"
+          id="ticket_cheap"
+          value="ticket_cheap"
           onChange={handleReservationFormChange}
-          checked={reservationFormData.ticket === "standard_ticket"}
+          checked={reservationFormData.ticket === "ticket_cheap"}
         />
         <label htmlFor="standard_ticket">Standard-billet</label>
         {/* Amount */}
@@ -284,6 +285,7 @@ export default function ReservationForm() {
           Submit
         </button>
       </form>
+      {/* Vis hvad der giver den totale pris */}
       <h3>Total: {totalPrice.toFixed(2)} kr.</h3>
       {/* Dialog for shows */}
       <dialog id="showsDialog" open={showsDialogActive}>
