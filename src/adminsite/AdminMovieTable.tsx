@@ -1,14 +1,24 @@
 import { useState } from "react";
-import { Movie } from "./MoviesData.ts";
-import MoviePutRoute from "./AdminMovieAPI/AdminMoviePut.ts";
-import MoviePostRoute from "./AdminMovieAPI/AdminMoviePost.ts";
-import getMovies from "./AdminMovieAPI/AdminMovieRead.ts";
+import { movieDefault, movie } from "../services/movieAPItest.ts";
+import { MoviePutRoute, MoviePostRoute } from "../services/movieAPItest.ts";
+import { getMovies } from "../services/movieAPItest.ts";
 
 interface MovieTableProps {
-  moviesList: Movie[];
-  onEdit: (id: number, updatedMovie: Movie) => void;
-  setFilteredMovies: React.Dispatch<React.SetStateAction<Movie[]>>;
+  moviesList: movieDefault[];
+  onEdit: (id: number, updatedMovie: movie) => void;
+  setFilteredMovies: React.Dispatch<React.SetStateAction<movieDefault[]>>;
 }
+
+// interface movie {
+//   id?: number;
+//   title: string;
+//   description: string;
+//   actors: string;
+//   duration: number;
+//   genre: string;
+//   threeD: boolean;
+//   active: boolean;
+// }
 
 export default function UserTable({
   moviesList,
@@ -16,7 +26,7 @@ export default function UserTable({
   setFilteredMovies,
 }: MovieTableProps) {
   // Stores the movie chosen to be updated
-  const [editMovie, setEditMovie] = useState<Movie | null>(null);
+  const [editMovie, setEditMovie] = useState<movieDefault | null>(null);
   // -------- Values below are all the movie values from the update-movie-form (Having use state for every value, makes it a 'controlled' form).
   const [updatedTitle, setUpdatedTitle] = useState<string>("");
   const [updatedDescription, setUpdatedDescription] = useState<string>("");
@@ -58,10 +68,10 @@ export default function UserTable({
 
   // When the "submit-button" is pressed this function updates or creates a movie.
   const handleSaveMovie = () => {
-    // If editMovie is true a movie is updated. 
+    // If editMovie is true a movie is updated.
     if (editMovie) {
       // Here the updatedMovie object is set and parsed to the MoviePutRoute.
-      const updatedMovie: Movie = {
+      const updatedMovie: movieDefault = {
         ...editMovie,
         title: updatedTitle,
         description: updatedDescription,
@@ -75,12 +85,12 @@ export default function UserTable({
       MoviePutRoute(updatedMovie)
         .then((updateMovieFromServer) => {
           onEdit(editMovie.id!, updateMovieFromServer);
-          
-          // Sets the editMovie to null after the update is complete.  
+
+          // Sets the editMovie to null after the update is complete.
           setEditMovie(null);
           resetForm();
-          
-          // Here the movie table is refreshed.  
+
+          // Here the movie table is refreshed.
           getMovies()
             .then((movies) => {
               setFilteredMovies(movies);
@@ -93,9 +103,9 @@ export default function UserTable({
           console.error("Error update movie - ", error);
         });
 
-    // If editMovie is false a new movie is created. 
+      // If editMovie is false a new movie is created.
     } else {
-      const newMovie: Movie = {
+      const newMovie: movieDefault = {
         title: updatedTitle,
         description: updatedDescription,
         actors: updatedActors,
@@ -124,6 +134,23 @@ export default function UserTable({
     resetForm();
   };
 
+  function displayGenre(movieGenre: string): string | undefined {
+    const genres: { [key: string]: string } = {
+      other: "Andet",
+      action: "Action",
+      comedy: "Komedie",
+      drama: "Drama",
+      horror: "Gyser",
+    };
+
+    for (const genre in genres) {
+      if (movieGenre == genre) {
+        return genres[genre];
+      }
+    }
+    return movieGenre;
+  }
+
   return (
     <section>
       <table>
@@ -146,7 +173,7 @@ export default function UserTable({
               <td>{movie.description}</td>
               <td>{movie.actors}</td>
               <td>{movie.duration}</td>
-              <td>{movie.genre}</td>
+              <td>{displayGenre(movie.genre)}</td>
               <td>{movie.threeD ? "Active" : "Inactive"}</td>
               <td>{movie.active ? "Active" : "Inactive"}</td>
               <td>
@@ -160,7 +187,7 @@ export default function UserTable({
       </table>
       <form>
         <div className="dialog">
-          // Sets the text of the depending on editMovie is true or false;
+          {/*Sets the text of the depending on editMovie is true or false*/}
           <h2>{editMovie ? "Opdater Film Data" : "Opret Ny Film"}</h2>
           <label>
             Titel:
@@ -200,12 +227,16 @@ export default function UserTable({
           </label>
           <label>
             Genre:
-            <input
-              type="text"
-              name="genre"
+            <select
               value={updatedGenre}
               onChange={(e) => setUpdatedGenre(e.target.value)}
-            />
+            >
+              <option value="other">Andet</option>
+              <option value="action">Action</option>
+              <option value="comedy">Komedie</option>
+              <option value="drama">Drama</option>
+              <option value="horror">Gyser</option>
+            </select>
           </label>
           <label>
             3D Film:

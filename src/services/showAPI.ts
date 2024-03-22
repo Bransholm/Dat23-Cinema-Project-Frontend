@@ -1,6 +1,11 @@
 import { API_URL } from "../settings";
 import { handleHttpErrors, makeOptions } from "./fetchUtils";
-import { Movie, getMovies, Movie as movieInterface } from "./movieApi";
+import {
+  Movie,
+  getMovies,
+  movie,
+  movie as movieInterface,
+} from "../services/movieApi";
 import {
   getTheatres,
   theatre,
@@ -12,7 +17,7 @@ const SHOWS_URL = API_URL + "/shows";
 interface show {
   id: number | null;
   theatre: theatre;
-  movie: Movie;
+  movie: movie;
   date: string;
   startTime: string;
 }
