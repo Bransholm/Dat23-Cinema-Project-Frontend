@@ -10,3 +10,5 @@ export default async function getMovies(): Promise<Movie[]> {
     return response.json() as Promise<Movie[]>;
   });
 }
+
+

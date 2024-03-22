@@ -1,6 +1,6 @@
 import { API_URL } from "../settings";
 import { handleHttpErrors, makeOptions } from "./fetchUtils";
-import { getMovies, movie as movieInterface } from "./movieAPItest";
+import { getMovies, movie as movieInterface } from "../services/movieAPItest";
 import { getTheatres, theatre as theatreInterface } from "./theatreAPItest";
 
 const SHOWS_URL = API_URL + "/shows";
@@ -46,9 +46,6 @@ interface ShowInterfaceTheatre {
   startTime: string;
 }
 
-
-
-
 // let showList: Array<Show> = [];
 
 let movies: Array<movieInterface> = [];
@@ -89,9 +86,7 @@ async function deleteShow(id: number): Promise<show> {
   return fetch(SHOWS_URL + "/" + id, options).then(handleHttpErrors);
 }
 
-
-
-export type { show, showInterface, ShowInterfaceTheatre};
+export type { show, showInterface, ShowInterfaceTheatre };
 
 // Export the getShows function to use it in other modules.
-export { getShows, getShow, addShow, deleteShow, movieData, theatreData};
+export { getShows, getShow, addShow, deleteShow, movieData, theatreData };

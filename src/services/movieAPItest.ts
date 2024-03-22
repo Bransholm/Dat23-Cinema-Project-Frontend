@@ -10,8 +10,8 @@ interface movie {
   actors: string;
   duration: number;
   genre: string;
-  is3D: boolean;
-  isActive: boolean;
+  threeD: boolean;
+  active: boolean;
 }
 
 async function getMovies(): Promise<Array<movie>> {
