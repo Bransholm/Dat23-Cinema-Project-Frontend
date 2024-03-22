@@ -220,7 +220,9 @@ export default function UserTable({
               value={updatedGenre}
               onChange={(e) => setUpdatedGenre(e.target.value)}
             >
-              <option value="other">Andet</option>
+              <option value="other">
+                Andet
+              </option>
               <option value="action">Action</option>
               <option value="comedy">Komedie</option>
               <option value="drama">Drama</option>
