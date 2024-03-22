@@ -123,6 +123,23 @@ export default function UserTable({
     resetForm();
   };
 
+  function displayGenre(movieGenre: string): string | undefined {
+    const genres: { [key: string]: string } = {
+      other: "Andet",
+      action: "Action",
+      comedy: "Komedie",
+      drama: "Drama",
+      horror: "Gyser",
+    };
+
+    for (const genre in genres) {
+      if (movieGenre == genre) {
+        return genres[genre];
+      }
+    }
+    return movieGenre;
+  }
+
   return (
     <section>
       <table>
@@ -145,7 +162,7 @@ export default function UserTable({
               <td>{movie.description}</td>
               <td>{movie.actors}</td>
               <td>{movie.duration}</td>
-              <td>{movie.genre}</td>
+              <td>{displayGenre(movie.genre)}</td>
               <td>{movie.threeD ? "Active" : "Inactive"}</td>
               <td>{movie.active ? "Active" : "Inactive"}</td>
               <td>
@@ -199,12 +216,16 @@ export default function UserTable({
           </label>
           <label>
             Genre:
-            <input
-              type="text"
-              name="genre"
+            <select
               value={updatedGenre}
               onChange={(e) => setUpdatedGenre(e.target.value)}
-            />
+            >
+              <option value="other">Andet</option>
+              <option value="action">Action</option>
+              <option value="comedy">Komedie</option>
+              <option value="drama">Drama</option>
+              <option value="horror">Gyser</option>
+            </select>
           </label>
           <label>
             3D Film:
