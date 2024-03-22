@@ -1,13 +1,24 @@
 import { useState } from "react";
-import { movie } from "../services/movieAPItest.ts";
+import { movieDefault, movie } from "../services/movieAPItest.ts";
 import { MoviePutRoute, MoviePostRoute } from "../services/movieAPItest.ts";
 import { getMovies } from "../services/movieAPItest.ts";
 
 interface MovieTableProps {
-  moviesList: movie[];
+  moviesList: movieDefault[];
   onEdit: (id: number, updatedMovie: movie) => void;
-  setFilteredMovies: React.Dispatch<React.SetStateAction<movie[]>>;
+  setFilteredMovies: React.Dispatch<React.SetStateAction<movieDefault[]>>;
 }
+
+// interface movie {
+//   id?: number;
+//   title: string;
+//   description: string;
+//   actors: string;
+//   duration: number;
+//   genre: string;
+//   threeD: boolean;
+//   active: boolean;
+// }
 
 export default function UserTable({
   moviesList,
@@ -15,7 +26,7 @@ export default function UserTable({
   setFilteredMovies,
 }: MovieTableProps) {
   // Stores the movie chosen to be updated
-  const [editMovie, setEditMovie] = useState<movie | null>(null);
+  const [editMovie, setEditMovie] = useState<movieDefault | null>(null);
   // -------- Values below are all the movie values from the update-movie-form (Having use state for every value, makes it a 'controlled' form).
   const [updatedTitle, setUpdatedTitle] = useState<string>("");
   const [updatedDescription, setUpdatedDescription] = useState<string>("");
@@ -60,7 +71,7 @@ export default function UserTable({
     // If editMovie is true a movie is updated.
     if (editMovie) {
       // Here the updatedMovie object is set and parsed to the MoviePutRoute.
-      const updatedMovie: movie = {
+      const updatedMovie: movieDefault = {
         ...editMovie,
         title: updatedTitle,
         description: updatedDescription,
@@ -94,7 +105,7 @@ export default function UserTable({
 
       // If editMovie is false a new movie is created.
     } else {
-      const newMovie: movie = {
+      const newMovie: movieDefault = {
         title: updatedTitle,
         description: updatedDescription,
         actors: updatedActors,
@@ -220,9 +231,7 @@ export default function UserTable({
               value={updatedGenre}
               onChange={(e) => setUpdatedGenre(e.target.value)}
             >
-              <option value="other">
-                Andet
-              </option>
+              <option value="other">Andet</option>
               <option value="action">Action</option>
               <option value="comedy">Komedie</option>
               <option value="drama">Drama</option>

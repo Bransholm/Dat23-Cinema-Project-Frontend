@@ -5,6 +5,17 @@ import { API_URL } from "../settings";
 const MOVIE_URL = API_URL + "/movies";
 
 interface movie {
+  id: number;
+  title: string;
+  description: string;
+  actors: string;
+  duration: number;
+  genre: string;
+  threeD: boolean;
+  active: boolean;
+}
+
+interface movieDefault {
   id?: number;
   title: string;
   description: string;
@@ -15,7 +26,7 @@ interface movie {
   active: boolean;
 }
 
-function MoviePutRoute(updatedMovie: movie): Promise<movie> {
+function MoviePutRoute(updatedMovie: movieDefault | movie): Promise<movie> {
   console.log("put-route-data", updatedMovie);
   return fetch(`${MOVIE_URL}/${updatedMovie.id}`, {
     method: "PUT",
@@ -32,7 +43,7 @@ function MoviePutRoute(updatedMovie: movie): Promise<movie> {
   });
 }
 
-function MoviePostRoute(createdMovie: movie): Promise<movie> {
+function MoviePostRoute(createdMovie: movieDefault | movie): Promise<movie> {
   console.log("post-route-data", createdMovie);
   return fetch(`${MOVIE_URL}`, {
     method: "POST",
@@ -61,6 +72,6 @@ async function getMovie(id: number): Promise<movie> {
   return fetch(MOVIE_URL + "/" + id).then(handleHttpErrors);
 }
 
-export type { movie };
+export type { movie, movieDefault };
 
 export { getMovies, getMovie, MoviePutRoute, MoviePostRoute };
