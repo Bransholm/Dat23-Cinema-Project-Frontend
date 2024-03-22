@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import {
   Reservation,
   addReservation,
-  getCustomers,
   getReservation,
 } from "../services/ReservationApiFacade";
 import { useLocation } from "react-router-dom";
@@ -14,7 +13,7 @@ import {
   showInterface,
 } from "../services/showAPI";
 import { getMovies, Movie } from "../services/movieApi";
-import { Customer } from "../services/customerApiFacade";
+import { Customer, getCustomers } from "../services/customerApiFacade";
 import { Price, getPrices } from "../services/pricesApiFacade";
 // import { theatre } from "../services/theatreAPItest";
 
@@ -69,7 +68,6 @@ export default function ReservationForm() {
       fetchReservation();
     }
     setIsEditReservationClicked(false);
-    console.log(reservationFormData);
   }, [
     reservationId,
     reservationFormData.id,
@@ -90,7 +88,6 @@ export default function ReservationForm() {
         const pricesResponse = await getPrices();
         const customersResponse = await getCustomers();
         const moviesResponse = await getMovies();
-        console.log("movies response: " + moviesResponse);
         // const theatres = await theatreData();
         setShows(showsResponse);
         setPrices(pricesResponse);
@@ -158,8 +155,7 @@ export default function ReservationForm() {
         key={`customer-${customer.id}`}
         onClick={() => handleCustomerChange(customer.id || 0)}
       >
-        {customer.id} - {customer.first_name} - {customer.last_name} -{" "}
-        {customer.email} - {customer.phone_number}
+        {customer.email}
       </button>
     ));
   };
@@ -224,13 +220,12 @@ export default function ReservationForm() {
               shows.find((show) => show.id === chosenShowId)?.movie.id
           )?.title
         }
-        {" - "}
         {moviesData.find(
           (movie) =>
             movie.id ===
             shows.find((show) => show.id === chosenShowId)?.movie.id
         )?.threeD ? (
-          <span>3D</span>
+          <span> - 3D</span>
         ) : null}
       </h2>
       <form id="reservationForm">
