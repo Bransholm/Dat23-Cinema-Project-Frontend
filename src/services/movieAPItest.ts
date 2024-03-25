@@ -1,6 +1,5 @@
 import { handleHttpErrors } from "./fetchUtils";
 import { API_URL } from "../settings";
-// import { Movie } from "../adminsite/MoviesData";
 
 const MOVIE_URL = API_URL + "/movies";
 
