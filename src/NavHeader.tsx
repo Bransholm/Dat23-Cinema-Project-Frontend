@@ -1,9 +1,9 @@
 import { NavLink } from "react-router-dom";
-// import AuthStatus from "./security/AuthStatus";
-// import { useAuth } from "./security/AuthProvider";
+import AuthStatus from "./security/AuthStatus";
+import { useAuth } from "./security/AuthProvider";
 
 export default function NavHeader() {
-  //   const auth = useAuth();
+  const auth = useAuth();
   return (
     <nav>
       <ul>
@@ -13,14 +13,17 @@ export default function NavHeader() {
         <li className="custom-tab">
           <NavLink to="/shows">Shows</NavLink>
         </li>
+        {auth.isLoggedIn() && (
         <li className="custom-tab">
           <NavLink to="/shows/create">Create Show</NavLink>
-        </li>
-        <li className="custom-tab">
-          <NavLink to="/admin-movies"> Admin Film Oversigt </NavLink>
-        </li>
-       
-        {/* <AuthStatus /> */}
+        </li> 
+        )}
+        {auth.isLoggedIn() && (
+          <li className="custom-tab">
+            <NavLink to="/movies"> Admin Film Oversigt </NavLink>
+          </li>
+        )}
+        <AuthStatus />
       </ul>
     </nav>
   );
