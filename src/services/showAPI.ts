@@ -24,10 +24,10 @@ interface show {
 interface showInterface {
   id: number | null;
   theatre: {
-    id: number;
+    id: number | null;
   };
   movie: {
-    id: number;
+    id: number | null;
     title: string;
     duration: number;
   };
@@ -42,7 +42,7 @@ interface ShowInterfaceTheatre {
     name: string;
   };
   movie: {
-    id: number;
+    id: number | null;
     title: string | undefined;
     duration: number;
   };

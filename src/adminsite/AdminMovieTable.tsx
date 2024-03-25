@@ -34,7 +34,7 @@ export default function UserTable({
     const movieToEdit = moviesList.find((movie) => movie.id === id);
     // Checks if the movieToEdit state is true.  If it is it sets states of all the attributes to those of the selected movie-object
     if (movieToEdit) {
-      setMovieId(movieToEdit.id);
+      setMovieId(movieToEdit.id || 0);
       setEditMovie(movieToEdit);
       setUpdatedTitle(movieToEdit.title);
       setUpdatedDescription(movieToEdit.description);

@@ -10,7 +10,7 @@ import { formatDateForBackend, formatTimeForBackend } from "../utils/dateUtils";
 const EMPTY_SHOW = {
   id: null,
   theatre: {
-    id: 0,
+    id: null,
     cinema: {
       id: null,
       city: "",
@@ -19,18 +19,14 @@ const EMPTY_SHOW = {
     name: "",
   },
   movie: {
-    id: 0,
+    id: null,
     title: "",
-    duration: 0,
     description: "",
     actors: "",
+    duration: 0,
     genre: "",
-    threed: false,
+    threeD: false,
     active: false,
-    show: {
-      date: "",
-      startTime: "",
-    },
   },
   date: "",
   startTime: "",
@@ -57,7 +53,8 @@ export default function ShowFormCreate() {
     fetchData();
   }, []);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (chosenMovie && chosenTheatre) {
       const formattedDate = formatDateForBackend(formData.date);
       const formattedStartTime = formatTimeForBackend(formData.startTime);
@@ -78,30 +75,30 @@ export default function ShowFormCreate() {
     }
   };
 
-  useEffect(() => {
-    // Check if both movie and theatre are chosen, then submit
-    if (chosenMovie !== null && chosenTheatre !== null) {
-      handleSubmit();
-    }
-  }, [chosenMovie, chosenTheatre, handleSubmit]);
+  // useEffect(() => {
+  //   // Check if both movie and theatre are chosen, then submit
+  //   if (chosenMovie !== null && chosenTheatre !== null) {
+  //     handleSubmit();
+  //   }
+  // }, [chosenMovie, chosenTheatre, handleSubmit]);
 
   const handleMovieChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = event.target;
+    const { value } = event.target;
     const movieId = parseInt(value);
     setChosenMovie(movieId); // Update chosenMovie state
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: { id: movieId },
+      movie: { id: movieId } as movieInterface,
     }));
   };
 
   const handleTheatreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = event.target;
+    const { value } = event.target;
     const theatreId = parseInt(value);
     setChosenTheatre(theatreId); // Update chosenTheatre state
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: { id: theatreId },
+      theatre: { id: theatreId } as theatreInterface,
     }));
   };
 
@@ -120,13 +117,13 @@ export default function ShowFormCreate() {
   const activeMoviesOptions = movies
     .filter((movie) => movie.active)
     .map((movie) => (
-      <option key={movie.id} value={movie.id}>
+      <option key={movie.id} value={movie.id || ""}>
         {movie.title} - {movie.duration} min
       </option>
     ));
 
   const theatreOptions = theatres.map((theatre) => (
-    <option key={theatre.id} value={theatre.id}>
+    <option key={theatre.id} value={theatre.id || ""}>
       {theatre.name}
     </option>
   ));

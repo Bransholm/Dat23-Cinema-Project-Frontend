@@ -4,7 +4,7 @@ import { API_URL } from "../settings";
 const MOVIE_URL = API_URL + "/movies";
 
 interface movie {
-  id: number;
+  id: number | null;
   title: string;
   description: string;
   actors: string;

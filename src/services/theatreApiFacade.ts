@@ -4,7 +4,7 @@ import { Cinema } from "./cinemaApiFacade";
 const THEATRES_URL = API_URL + "/theatres";
 
 interface theatre {
-  id: number;
+  id: number | null;
   cinema: Cinema;
   name: string;
 }

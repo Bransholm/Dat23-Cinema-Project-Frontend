@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import UserTable from "./AdminMovieTable";
-import { getMovies } from "../services/movieApi.ts";
-import { movie } from "../services/movieApi.ts";
-
+import { getMovies, movie } from "../services/movieApi.ts";
 export default function MovieFilter() {
   // Stores the movielist fetched from the database
   const [moviesList, setMovieList] = useState<movie[]>([]);

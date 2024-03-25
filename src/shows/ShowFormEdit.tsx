@@ -102,11 +102,11 @@ export default function ShowFormEdit() {
         <label htmlFor="theatre">Theatre</label>
         <select
           name="theatre"
-          value={show.theatre.id}
+          value={show.theatre.id || ""}
           onChange={handleTheatreChange}
         >
           {theatres.map((theatre) => (
-            <option key={theatre.id} value={theatre.id}>
+            <option key={theatre.id} value={theatre.id || 0}>
               {theatre.name}
             </option>
           ))}
@@ -114,9 +114,13 @@ export default function ShowFormEdit() {
       </div>
       <div>
         <label htmlFor="movie">Movie</label>
-        <select name="movie" value={show.movie.id} onChange={handleMovieChange}>
+        <select
+          name="movie"
+          value={show.movie.id || 0}
+          onChange={handleMovieChange}
+        >
           {movies.map((movie) => (
-            <option key={movie.id} value={movie.id}>
+            <option key={movie.id} value={movie.id || 0}>
               {movie.title}
             </option>
           ))}
