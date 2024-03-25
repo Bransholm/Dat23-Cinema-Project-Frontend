@@ -4,7 +4,7 @@ import { API_URL } from "../settings";
 const MOVIE_URL = API_URL + "/movies";
 
 interface movie {
-  id: number;
+  id: number | null;
   title: string;
   description: string;
   actors: string;
@@ -25,37 +25,39 @@ interface movieDefault {
   active: boolean;
 }
 
-function MoviePutRoute(updatedMovie: movieDefault | movie): Promise<movie> {
+async function MoviePutRoute(
+  updatedMovie: movieDefault | movie
+): Promise<movie> {
   console.log("put-route-data", updatedMovie);
-  return fetch(`${MOVIE_URL}/${updatedMovie.id}`, {
+  const response = await fetch(`${MOVIE_URL}/${updatedMovie.id}`, {
     method: "PUT",
     headers: {
       "content-type": "application/json",
     },
     body: JSON.stringify(updatedMovie),
-  }).then((response) => {
-    console.log("put-route-response", response); // Log the response here
-    if (!response.ok) {
-      throw new Error("An error occured while updating the movie");
-    }
-    return response.json() as Promise<movie>;
   });
+  console.log("put-route-response", response); // Log the response here
+  if (!response.ok) {
+    throw new Error("An error occured while updating the movie");
+  }
+  return await (response.json() as Promise<movie>);
 }
 
-function MoviePostRoute(createdMovie: movieDefault | movie): Promise<movie> {
+async function MoviePostRoute(
+  createdMovie: movieDefault | movie
+): Promise<movie> {
   console.log("post-route-data", createdMovie);
-  return fetch(`${MOVIE_URL}`, {
+  const response = await fetch(`${MOVIE_URL}`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
     body: JSON.stringify(createdMovie),
-  }).then((response) => {
-    if (!response.ok) {
-      throw new Error("An error occured while updating the movie");
-    }
-    return response.json() as Promise<movie>;
   });
+  if (!response.ok) {
+    throw new Error("An error occured while updating the movie");
+  }
+  return await (response.json() as Promise<movie>);
 }
 
 async function getMovies(): Promise<Array<movie>> {

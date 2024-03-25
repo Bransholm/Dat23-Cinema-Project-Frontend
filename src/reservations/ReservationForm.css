@@ -1,0 +1,12 @@
+#reservationForm {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 0.5em;
+}
+
+dialog {
+  position: fixed;
+  width: 50%;
+  height: 50%;
+  top: 25%;
+}

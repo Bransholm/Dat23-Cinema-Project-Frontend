@@ -1,18 +1,22 @@
 import { API_URL } from "../settings";
 import { handleHttpErrors, makeOptions } from "./fetchUtils";
-import { getMovies, movie as movieInterface } from "../services/movieAPItest";
-import { getTheatres, theatre as theatreInterface } from "./theatreAPItest";
+import {
+  getMovies,
+  movie,
+  movie as movieInterface,
+} from "../services/movieApi";
+import {
+  getTheatres,
+  theatre,
+  theatre as theatreInterface,
+} from "./theatreApiFacade";
 
 const SHOWS_URL = API_URL + "/shows";
 
 interface show {
   id: number | null;
-  theatre: {
-    id: number;
-  };
-  movie: {
-    id: number;
-  };
+  theatre: theatre;
+  movie: movie;
   date: string;
   startTime: string;
 }
@@ -20,10 +24,10 @@ interface show {
 interface showInterface {
   id: number | null;
   theatre: {
-    id: number;
+    id: number | null;
   };
   movie: {
-    id: number;
+    id: number | null;
     title: string;
     duration: number;
   };
@@ -38,7 +42,7 @@ interface ShowInterfaceTheatre {
     name: string;
   };
   movie: {
-    id: number;
+    id: number | null;
     title: string | undefined;
     duration: number;
   };
@@ -63,7 +67,9 @@ async function theatreData() {
   return theatres;
 }
 
-async function getShows(): Promise<Array<show | showInterface | ShowInterfaceTheatre>> {
+async function getShows(): Promise<
+  Array<show | showInterface | ShowInterfaceTheatre>
+> {
   console.log("fetchShows");
   // Fetch data from the API URL and handle any HTTP errors.
   return fetch(SHOWS_URL).then(handleHttpErrors);

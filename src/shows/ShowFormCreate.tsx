@@ -1,19 +1,35 @@
 import { useEffect, useState } from "react";
 import { addShow, show as showInterface } from "../services/showAPI";
-import { getMovies, movie as movieInterface } from "../services/movieAPItest";
-import { getTheatres, theatre as theatreInterface } from "../services/theatreAPItest";
+import { getMovies, movie as movieInterface } from "../services/movieApi";
+import {
+  getTheatres,
+  theatre as theatreInterface,
+} from "../services/theatreApiFacade";
 import { formatDateForBackend, formatTimeForBackend } from "../utils/dateUtils"; // Import a utility function to format the date
 
 const EMPTY_SHOW = {
   id: null,
-  movie: {
-    id: 0
-  },
   theatre: {
-    id: 0
+    id: null,
+    cinema: {
+      id: null,
+      city: "",
+      name: "",
+    },
+    name: "",
+  },
+  movie: {
+    id: null,
+    title: "",
+    description: "",
+    actors: "",
+    duration: 0,
+    genre: "",
+    threeD: false,
+    active: false,
   },
   date: "",
-  startTime: ""
+  startTime: "",
 };
 
 export default function ShowFormCreate() {
@@ -37,38 +53,8 @@ export default function ShowFormCreate() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    // Check if both movie and theatre are chosen, then submit
-    if (chosenMovie !== null && chosenTheatre !== null) {
-      handleSubmit();
-    }
-  }, [chosenMovie, chosenTheatre]);
-
-  const handleMovieChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
-    const movieId = parseInt(value);
-    setChosenMovie(movieId); // Update chosenMovie state
-    setFormData((prevFormData) => ({ ...prevFormData, movie: { id: movieId } }));
-  };
-
-  const handleTheatreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
-    const theatreId = parseInt(value);
-    setChosenTheatre(theatreId); // Update chosenTheatre state
-    setFormData((prevFormData) => ({ ...prevFormData, theatre: { id: theatreId } }));
-  };
-
-  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setFormData((prevFormData) => ({ ...prevFormData, date: value }));
-  };
-
-  const handleStartTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setFormData((prevFormData) => ({ ...prevFormData, startTime: value }));
-  };
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (chosenMovie && chosenTheatre) {
       const formattedDate = formatDateForBackend(formData.date);
       const formattedStartTime = formatTimeForBackend(formData.startTime);
@@ -76,7 +62,7 @@ export default function ShowFormCreate() {
       const newFormData = {
         ...formData,
         date: formattedDate,
-        startTime: formattedStartTime
+        startTime: formattedStartTime,
       };
 
       const newShow = await addShow(newFormData);
@@ -89,16 +75,55 @@ export default function ShowFormCreate() {
     }
   };
 
+  // useEffect(() => {
+  //   // Check if both movie and theatre are chosen, then submit
+  //   if (chosenMovie !== null && chosenTheatre !== null) {
+  //     handleSubmit();
+  //   }
+  // }, [chosenMovie, chosenTheatre, handleSubmit]);
+
+  const handleMovieChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+    const movieId = parseInt(value);
+    setChosenMovie(movieId); // Update chosenMovie state
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      movie: { id: movieId } as movieInterface,
+    }));
+  };
+
+  const handleTheatreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+    const theatreId = parseInt(value);
+    setChosenTheatre(theatreId); // Update chosenTheatre state
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      theatre: { id: theatreId } as theatreInterface,
+    }));
+  };
+
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setFormData((prevFormData) => ({ ...prevFormData, date: value }));
+  };
+
+  const handleStartTimeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value } = event.target;
+    setFormData((prevFormData) => ({ ...prevFormData, startTime: value }));
+  };
+
   const activeMoviesOptions = movies
     .filter((movie) => movie.active)
     .map((movie) => (
-      <option key={movie.id} value={movie.id}>
+      <option key={movie.id} value={movie.id || ""}>
         {movie.title} - {movie.duration} min
       </option>
     ));
 
   const theatreOptions = theatres.map((theatre) => (
-    <option key={theatre.id} value={theatre.id}>
+    <option key={theatre.id} value={theatre.id || ""}>
       {theatre.name}
     </option>
   ));
@@ -108,22 +133,40 @@ export default function ShowFormCreate() {
       <h2>Create a new show</h2>
       <form onSubmit={(e) => e.preventDefault()}>
         <label htmlFor="movie">Movie</label>
-        <select id="movie" onChange={handleMovieChange} value={chosenMovie ?? ""}>
+        <select
+          id="movie"
+          onChange={handleMovieChange}
+          value={chosenMovie ?? ""}
+        >
           <option value="">Choose a movie</option>
           {activeMoviesOptions}
         </select>
         <br />
         <label htmlFor="theatre">Theatre</label>
-        <select id="theatre" onChange={handleTheatreChange} value={chosenTheatre ?? ""}>
+        <select
+          id="theatre"
+          onChange={handleTheatreChange}
+          value={chosenTheatre ?? ""}
+        >
           <option value="">Choose a theatre</option>
           {theatreOptions}
         </select>
         <br />
         <label htmlFor="date">Date</label>
-        <input type="date" id="date" onChange={handleDateChange} value={formData.date} />
+        <input
+          type="date"
+          id="date"
+          onChange={handleDateChange}
+          value={formData.date}
+        />
         <br />
         <label htmlFor="startTime">Start time</label>
-        <input type="time" id="startTime" onChange={handleStartTimeChange} value={formData.startTime} />
+        <input
+          type="time"
+          id="startTime"
+          onChange={handleStartTimeChange}
+          value={formData.startTime}
+        />
         <br />
         <button type="button" onClick={handleSubmit}>
           Create show

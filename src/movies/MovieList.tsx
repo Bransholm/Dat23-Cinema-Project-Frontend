@@ -1,4 +1,4 @@
-import { getMovies, movie as MovieInterface } from "../services/movieAPItest";
+import { getMovies, movie as MovieInterface } from "../services/movieApi";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getShows } from "../services/showAPI";
@@ -27,7 +27,9 @@ export default function MovieList() {
   const activeMovies = movies.filter((movie) => movie.active);
 
   // Filter out movies that have corresponding shows
-  const moviesWithShows = activeMovies.filter((movie) => shows.some((show) => show.movie.id === movie.id));
+  const moviesWithShows = activeMovies.filter((movie) =>
+    shows.some((show) => show.movie.id === movie.id)
+  );
 
   const movieListItems = moviesWithShows.map((movie) => (
     <li key={movie.id} className="show-list-item">

@@ -1,24 +1,16 @@
 import { useState } from "react";
-import { movieDefault, movie } from "../services/movieAPItest.ts";
-import { MoviePutRoute, MoviePostRoute } from "../services/movieAPItest.ts";
-import { getMovies } from "../services/movieAPItest.ts";
+import {
+  getMovies,
+  movie,
+  MoviePutRoute,
+  MoviePostRoute,
+} from "../services/movieApi.ts";
 
 interface MovieTableProps {
-  moviesList: movieDefault[];
+  moviesList: movie[];
   onEdit: (id: number, updatedMovie: movie) => void;
-  setFilteredMovies: React.Dispatch<React.SetStateAction<movieDefault[]>>;
+  setFilteredMovies: React.Dispatch<React.SetStateAction<movie[]>>;
 }
-
-// interface movie {
-//   id?: number;
-//   title: string;
-//   description: string;
-//   actors: string;
-//   duration: number;
-//   genre: string;
-//   threeD: boolean;
-//   active: boolean;
-// }
 
 export default function UserTable({
   moviesList,
@@ -26,8 +18,9 @@ export default function UserTable({
   setFilteredMovies,
 }: MovieTableProps) {
   // Stores the movie chosen to be updated
-  const [editMovie, setEditMovie] = useState<movieDefault | null>(null);
+  const [editMovie, setEditMovie] = useState<movie | null>(null);
   // -------- Values below are all the movie values from the update-movie-form (Having use state for every value, makes it a 'controlled' form).
+  const [movieId, setMovieId] = useState<number>(0);
   const [updatedTitle, setUpdatedTitle] = useState<string>("");
   const [updatedDescription, setUpdatedDescription] = useState<string>("");
   const [updatedActors, setUpdatedActors] = useState<string>("");
@@ -41,6 +34,7 @@ export default function UserTable({
     const movieToEdit = moviesList.find((movie) => movie.id === id);
     // Checks if the movieToEdit state is true.  If it is it sets states of all the attributes to those of the selected movie-object
     if (movieToEdit) {
+      setMovieId(movieToEdit.id || 0);
       setEditMovie(movieToEdit);
       setUpdatedTitle(movieToEdit.title);
       setUpdatedDescription(movieToEdit.description);
@@ -71,7 +65,7 @@ export default function UserTable({
     // If editMovie is true a movie is updated.
     if (editMovie) {
       // Here the updatedMovie object is set and parsed to the MoviePutRoute.
-      const updatedMovie: movieDefault = {
+      const updatedMovie: movie = {
         ...editMovie,
         title: updatedTitle,
         description: updatedDescription,
@@ -83,7 +77,7 @@ export default function UserTable({
       };
 
       MoviePutRoute(updatedMovie)
-        .then((updateMovieFromServer) => {
+        .then((updateMovieFromServer: movie) => {
           onEdit(editMovie.id!, updateMovieFromServer);
 
           // Sets the editMovie to null after the update is complete.
@@ -99,13 +93,14 @@ export default function UserTable({
               console.error("Error fetching movies ", error);
             });
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           console.error("Error update movie - ", error);
         });
 
       // If editMovie is false a new movie is created.
     } else {
-      const newMovie: movieDefault = {
+      const newMovie: movie = {
+        id: movieId,
         title: updatedTitle,
         description: updatedDescription,
         actors: updatedActors,
@@ -116,7 +111,7 @@ export default function UserTable({
       };
 
       MoviePostRoute(newMovie)
-        .then((createdMovieFromServer) => {
+        .then((createdMovieFromServer: movie) => {
           console.log(createdMovieFromServer);
           // Here the movie table is refreshed.
           getMovies()
@@ -127,7 +122,7 @@ export default function UserTable({
               console.error("Error fetching movies ", error);
             });
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           console.error("Error creating a new movie: - ", error);
         });
     }
