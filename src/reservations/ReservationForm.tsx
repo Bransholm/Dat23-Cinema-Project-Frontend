@@ -12,7 +12,7 @@ import {
   show,
   showInterface,
 } from "../services/showAPI";
-import { getMovies, Movie } from "../services/movieApi";
+import { getMovies, movie } from "../services/movieApi";
 import { Customer, getCustomers } from "../services/customerApiFacade";
 import { Price, getPrices } from "../services/pricesApiFacade";
 // import { theatre } from "../services/theatreAPItest";
@@ -38,7 +38,7 @@ export default function ReservationForm() {
   const [shows, setShows] = useState<
     (show | showInterface | ShowInterfaceTheatre)[]
   >([]);
-  const [moviesData, setMoviesData] = useState<Movie[]>([]);
+  const [moviesData, setMoviesData] = useState<movie[]>([]);
   // const [theatresData, setTheatreData] = useState<theatre[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [prices, setPrices] = useState<Price>();
@@ -280,7 +280,6 @@ export default function ReservationForm() {
           Submit
         </button>
       </form>
-      {/* Vis hvad der giver den totale pris */}
       <h3>Total: {totalPrice.toFixed(2)} kr.</h3>
       {/* Dialog for shows */}
       <dialog id="showsDialog" open={showsDialogActive}>

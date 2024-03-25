@@ -1,7 +1,6 @@
 import { API_URL } from "../settings";
 import { handleHttpErrors, makeOptions } from "./fetchUtils";
 import {
-  Movie,
   getMovies,
   movie,
   movie as movieInterface,

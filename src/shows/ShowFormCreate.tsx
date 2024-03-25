@@ -9,11 +9,28 @@ import { formatDateForBackend, formatTimeForBackend } from "../utils/dateUtils";
 
 const EMPTY_SHOW = {
   id: null,
-  movie: {
-    id: 0,
-  },
   theatre: {
     id: 0,
+    cinema: {
+      id: null,
+      city: "",
+      name: "",
+    },
+    name: "",
+  },
+  movie: {
+    id: 0,
+    title: "",
+    duration: 0,
+    description: "",
+    actors: "",
+    genre: "",
+    threed: false,
+    active: false,
+    show: {
+      date: "",
+      startTime: "",
+    },
   },
   date: "",
   startTime: "",
@@ -40,45 +57,6 @@ export default function ShowFormCreate() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    // Check if both movie and theatre are chosen, then submit
-    if (chosenMovie !== null && chosenTheatre !== null) {
-      handleSubmit();
-    }
-  }, [chosenMovie, chosenTheatre]);
-
-  const handleMovieChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
-    const movieId = parseInt(value);
-    setChosenMovie(movieId); // Update chosenMovie state
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      movie: { id: movieId },
-    }));
-  };
-
-  const handleTheatreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
-    const theatreId = parseInt(value);
-    setChosenTheatre(theatreId); // Update chosenTheatre state
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      theatre: { id: theatreId },
-    }));
-  };
-
-  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setFormData((prevFormData) => ({ ...prevFormData, date: value }));
-  };
-
-  const handleStartTimeChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { value } = event.target;
-    setFormData((prevFormData) => ({ ...prevFormData, startTime: value }));
-  };
-
   const handleSubmit = async () => {
     if (chosenMovie && chosenTheatre) {
       const formattedDate = formatDateForBackend(formData.date);
@@ -98,6 +76,45 @@ export default function ShowFormCreate() {
     } else {
       console.error("Please choose a movie and a theatre.");
     }
+  };
+
+  useEffect(() => {
+    // Check if both movie and theatre are chosen, then submit
+    if (chosenMovie !== null && chosenTheatre !== null) {
+      handleSubmit();
+    }
+  }, [chosenMovie, chosenTheatre, handleSubmit]);
+
+  const handleMovieChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = event.target;
+    const movieId = parseInt(value);
+    setChosenMovie(movieId); // Update chosenMovie state
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: { id: movieId },
+    }));
+  };
+
+  const handleTheatreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = event.target;
+    const theatreId = parseInt(value);
+    setChosenTheatre(theatreId); // Update chosenTheatre state
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: { id: theatreId },
+    }));
+  };
+
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setFormData((prevFormData) => ({ ...prevFormData, date: value }));
+  };
+
+  const handleStartTimeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value } = event.target;
+    setFormData((prevFormData) => ({ ...prevFormData, startTime: value }));
   };
 
   const activeMoviesOptions = movies

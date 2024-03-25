@@ -31,20 +31,6 @@ async function addReservation(
   return fetch(URL, options).then(handleHttpErrors);
 }
 
-function getCinemas() {
-  return [{ id: 1, city: "123 Example St, Cityville", name: "Cinema City" }];
-}
-
-function getTheatres() {
-  return [{ id: 1, name: "Theatre 1" }];
-}
-
 export type { Reservation };
 // eslint-disable-next-line react-refresh/only-export-components
-export {
-  addReservation,
-  getRerservations,
-  getReservation,
-  getCinemas,
-  getTheatres,
-};
+export { addReservation, getRerservations, getReservation };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getShows, ShowInterfaceTheatre } from "../services/showAPI";
-import { getMovie, movie as movieInterface } from "../services/movieAPItest";
+import { getMovie, movie as movieInterface } from "../services/movieApi";
 
 export default function ShowsOnMovies() {
   const { id } = useParams();
@@ -71,7 +71,8 @@ export default function ShowsOnMovies() {
                       <>
                         <strong>Movie ID:</strong> {show.movie.id} <br />
                         <strong>Movie Title:</strong> {show.movie.title} <br />
-                        <strong>Movie Duration:</strong> {show.movie.duration} minutes <br />
+                        <strong>Movie Duration:</strong> {show.movie.duration}{" "}
+                        minutes <br />
                       </>
                     )}
                   </div>

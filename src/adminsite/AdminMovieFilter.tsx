@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import UserTable from "./AdminMovieTable";
-import { getMovies } from "../services/movieAPItest.ts";
-import { movieDefault } from "../services/movieAPItest.ts";
+import { getMovies } from "../services/movieApi.ts";
+import { movie } from "../services/movieApi.ts";
 
 export default function MovieFilter() {
   // Stores the movielist fetched from the database
-  const [moviesList, setMovieList] = useState<movieDefault[]>([]);
+  const [moviesList, setMovieList] = useState<movie[]>([]);
   // Stores the filtered movielist shown to the user
-  const [filteredMovies, setFilteredMovies] = useState<movieDefault[]>([]);
+  const [filteredMovies, setFilteredMovies] = useState<movie[]>([]);
   // Stores the search value
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -32,7 +32,7 @@ export default function MovieFilter() {
     filterMovies();
   }, [durationFilter, isActiveFilter, is3dFilter, sortOption, searchQuery]);
 
-  const handleEdit = (id: number, updatedMovie: movieDefault) => {
+  const handleEdit = (id: number, updatedMovie: movie) => {
     const updatedMovieList = filteredMovies.map((movie) => {
       if (movie.id === id) {
         return updatedMovie;
