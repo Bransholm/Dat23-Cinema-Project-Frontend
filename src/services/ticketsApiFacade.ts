@@ -1,11 +1,12 @@
 import { API_URL } from "../settings";
+import { Reservation } from "./ReservationApiFacade";
 import { handleHttpErrors, makeOptions } from "./fetchUtils";
 import { Seat } from "./seatsApiFacade";
 const TICKETS_URL = API_URL + "/tickets";
 
 interface Ticket {
   id: number | null;
-  reservation: Ticket;
+  reservation: Reservation;
   seat: Seat;
   ticketType: string;
   ticketPrice: number;

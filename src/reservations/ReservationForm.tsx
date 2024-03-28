@@ -18,6 +18,7 @@ import { Price, getPrices } from "../services/pricesApiFacade";
 import SeatsReservation from "./SeatsReservation";
 import { getTheatre } from "../services/theatreApiFacade";
 import { Seat } from "../services/seatsApiFacade";
+import { addTicket } from "../services/ticketsApiFacade";
 // import { theatre } from "../services/theatreAPItest";
 
 const EMPTY_RESERVATION = {
@@ -50,6 +51,7 @@ export default function ReservationForm() {
   const [chosenTicket, setChosenTicket] = useState("");
   const [chosenShowId, setChosenShowId] = useState(0);
   const [chosenShowTheatreId, setChosenShowTheatreId] = useState(0);
+  const [chosenSeats, setChosenSeats] = useState<Seat[]>([]);
   const [chosenCustomerId, setChosenCustomerId] = useState(0);
   const [showsDialogActive, setShowsDialogActive] = useState(false);
   const [customersDialogActive, setCustomersDialogActive] = useState(false);
@@ -206,6 +208,7 @@ export default function ReservationForm() {
     console.log(seats);
     // setChosenAmount(seats.length);
     if (seats.length != 0) {
+      setChosenSeats(seats);
       if (seats[0].lineNumber <= 2) {
         setChosenTicket("ticket_expensive");
       } else if (seats[0].lineNumber >= 9) {
@@ -226,6 +229,18 @@ export default function ReservationForm() {
     reservationFormData.show_id = chosenShowId;
     reservationFormData.ticket = chosenTicket;
     const newReservation = await addReservation(reservationFormData);
+    if (prices) {
+      chosenSeats.forEach(async (seat) => {
+        await addTicket({
+          id: null,
+          reservation: reservationFormData,
+          seat: seat,
+          ticketType: chosenTicket,
+          ticketPrice: prices[chosenTicket] || 0,
+        });
+      });
+    }
+
     setReservationFormData({ ...EMPTY_RESERVATION });
     console.info("New/Edited Reservation", newReservation);
     console.log(reservationFormData);
