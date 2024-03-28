@@ -14,10 +14,14 @@ async function getTheatres(): Promise<Array<theatre>> {
   return fetch(THEATRES_URL).then(handleHttpErrors);
 }
 
+async function getSeatsOfTheatre(id: number) {
+  return fetch(`${THEATRES_URL}/${id}/seats`).then(handleHttpErrors);
+}
+
 async function getTheatre(id: number): Promise<theatre> {
   return fetch(THEATRES_URL + "/" + id).then(handleHttpErrors);
 }
 
 export type { theatre };
 
-export { getTheatres, getTheatre };
+export { getTheatres, getTheatre, getSeatsOfTheatre };

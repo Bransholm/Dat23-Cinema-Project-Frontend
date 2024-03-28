@@ -1,0 +1,7 @@
+#seats-reservation {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  position: relative;
+  padding-left: 25vw;
+  padding-right: 25vw;
+}

@@ -15,6 +15,9 @@ import {
 import { getMovies, movie } from "../services/movieApi";
 import { Customer, getCustomers } from "../services/customerApiFacade";
 import { Price, getPrices } from "../services/pricesApiFacade";
+import SeatsReservation from "./SeatsReservation";
+import { getTheatre } from "../services/theatreApiFacade";
+import { Seat } from "../services/seatsApiFacade";
 // import { theatre } from "../services/theatreAPItest";
 
 const EMPTY_RESERVATION = {
@@ -46,6 +49,7 @@ export default function ReservationForm() {
   const [chosenAmount, setChosenAmount] = useState(0);
   const [chosenTicket, setChosenTicket] = useState("");
   const [chosenShowId, setChosenShowId] = useState(0);
+  const [chosenShowTheatreId, setChosenShowTheatreId] = useState(0);
   const [chosenCustomerId, setChosenCustomerId] = useState(0);
   const [showsDialogActive, setShowsDialogActive] = useState(false);
   const [customersDialogActive, setCustomersDialogActive] = useState(false);
@@ -101,6 +105,22 @@ export default function ReservationForm() {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (chosenShowId != 0) {
+      const fetchTheatre = async () => {
+        try {
+          const theatreResponse = await getTheatre(
+            shows.find((show) => show.id === chosenShowId)?.theatre.id || 0
+          );
+          setChosenShowTheatreId(theatreResponse.id || 0);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchTheatre();
+    }
+  }, [chosenShowId, shows]);
 
   useEffect(() => {
     handlePriceChange();
@@ -182,18 +202,19 @@ export default function ReservationForm() {
     setCustomersDialogActive(false);
   }
 
-  const handleReservationFormChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { name, value } = e.target;
-    setReservationFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-    if (name === "ticket") {
-      setChosenTicket(value);
-    } else if (name === "ticket_amount") {
-      setChosenAmount(parseInt(value));
+  const handleChosenSeatsChange = (seats: Seat[]) => {
+    console.log(seats);
+    // setChosenAmount(seats.length);
+    if (seats.length != 0) {
+      if (seats[0].lineNumber <= 2) {
+        setChosenTicket("ticket_expensive");
+      } else if (seats[0].lineNumber >= 9) {
+        setChosenTicket("ticket_medium");
+      } else {
+        setChosenTicket("ticket_cheap");
+      }
+    } else {
+      setChosenTicket("");
     }
   };
 
@@ -203,6 +224,7 @@ export default function ReservationForm() {
     reservationFormData.total_price = totalPrice;
     reservationFormData.customer_id = chosenCustomerId;
     reservationFormData.show_id = chosenShowId;
+    reservationFormData.ticket = chosenTicket;
     const newReservation = await addReservation(reservationFormData);
     setReservationFormData({ ...EMPTY_RESERVATION });
     console.info("New/Edited Reservation", newReservation);
@@ -233,43 +255,20 @@ export default function ReservationForm() {
           Vælg Show
         </button>
         <h4>Valgt show: {chosenShowId}</h4>
-        {/* Ticket options */}
-        <h4>Billet:</h4>
-        <input
-          type="radio"
-          name="ticket"
-          id="ticket_medium"
-          value="ticket_medium"
-          onChange={handleReservationFormChange}
-          checked={reservationFormData.ticket === "ticket_medium"}
-        />
-        <label htmlFor="cowboy_ticket">Cowboy-billet</label>
-        <input
-          type="radio"
-          name="ticket"
-          id="ticket_expensive"
-          value="ticket_expensive"
-          onChange={handleReservationFormChange}
-          checked={reservationFormData.ticket === "ticket_expensive"}
-        />
-        <label htmlFor="sofa_ticket">Sofa-billet</label>
-        <input
-          type="radio"
-          name="ticket"
-          id="ticket_cheap"
-          value="ticket_cheap"
-          onChange={handleReservationFormChange}
-          checked={reservationFormData.ticket === "ticket_cheap"}
-        />
-        <label htmlFor="standard_ticket">Standard-billet</label>
         {/* Amount */}
         <label htmlFor="ticketAmount">Antal billetter:</label>
         <input
           type="number"
           name="ticket_amount"
           id="ticket_amount"
-          onChange={handleReservationFormChange}
-          value={reservationFormData.ticket_amount}
+          onChange={(e) => {
+            setChosenAmount(parseInt(e.currentTarget.value, 10));
+          }}
+        />
+        <SeatsReservation
+          theatreId={chosenShowTheatreId}
+          onChosenSeatsChange={handleChosenSeatsChange}
+          seatAmount={chosenAmount}
         />
         <button id="choose-customer-btn" onClick={handleCustomersDialogClick}>
           Vælg kunde
@@ -286,6 +285,7 @@ export default function ReservationForm() {
         <ShowsList></ShowsList>
         <button onClick={handleCloseDialog}>X</button>
       </dialog>
+      {/* Dialog for customers */}
       <dialog id="customersDialog" open={customersDialogActive}>
         <CustomersList></CustomersList>
         <button onClick={handleCloseDialog}>X</button>
