@@ -32,5 +32,4 @@ async function addReservation(
 }
 
 export type { Reservation };
-// eslint-disable-next-line react-refresh/only-export-components
 export { addReservation, getRerservations, getReservation };
